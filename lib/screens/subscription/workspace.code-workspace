@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "vpn",
+			"path": "../../.."
+		},
+		{
+			"name": "master",
+			"path": "../../../master"
+		}
+	],
+	"settings": {}
+}

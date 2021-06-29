@@ -6,10 +6,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:open_nizvpn/core/models/dnsConfig.dart';
-import 'package:open_nizvpn/core/models/vpnConfig.dart';
-import 'package:open_nizvpn/core/models/vpnStatus.dart';
-import 'package:open_nizvpn/core/utils/nizvpn_engine.dart';
+import 'package:open_belvpn/core/models/dnsConfig.dart';
+import 'package:open_belvpn/core/models/vpnConfig.dart';
+import 'package:open_belvpn/core/models/vpnStatus.dart';
+import 'package:open_belvpn/core/utils/nizvpn_engine.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class MainScreen extends StatefulWidget {
@@ -40,11 +40,14 @@ class _MainScreenState extends State<MainScreen> {
   ///Here you can start fill the listVpn, for this simple app, i'm using free vpn from https://www.vpngate.net/
   void initVpn() async {
     _listVpn.add(VpnConfig(
-        config: await rootBundle.loadString("assets/vpn/japan.ovpn"),
-        name: "Japan"));
+        config: await rootBundle.loadString("assets/vpn/nl.ovpn"),
+        name: "Netherlands"));
     _listVpn.add(VpnConfig(
-        config: await rootBundle.loadString("assets/vpn/us.ovpn"),
-        name: "United State"));
+        config: await rootBundle.loadString("assets/vpn/sg.ovpn"),
+        name: "Singapore"));
+    _listVpn.add(VpnConfig(
+        config: await rootBundle.loadString("assets/vpn/ca.ovpn"),
+        name: "Canada"));
     if (mounted)
       setState(() {
         _selectedVpn = _listVpn.first;
@@ -128,6 +131,7 @@ class _MainScreenState extends State<MainScreen> {
       ///Start if stage is disconnected
       NizVpn.startVpn(
         _selectedVpn,
+        // dns: DnsConfig("8.8.8.8", "8.8.4.4"),
         dns: DnsConfig("23.253.163.53", "198.101.242.72"),
       );
     } else {

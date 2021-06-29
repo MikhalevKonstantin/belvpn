@@ -7,10 +7,10 @@ import 'model.dart';
 
 class VpnStatus extends Model {
   VpnStatus({
-    this.duration,
-    this.lastPacketReceive,
-    this.byteIn,
-    this.byteOut,
+    this.duration = '',
+    this.lastPacketReceive = '',
+    this.byteIn = '',
+    this.byteOut = '',
   });
 
   String duration;
