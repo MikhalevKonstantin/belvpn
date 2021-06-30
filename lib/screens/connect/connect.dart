@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/ui/screens/mainScreen.dart';
+
+import 'package:open_belvpn/core/models/dnsConfig.dart';
+import 'package:open_belvpn/core/models/vpnConfig.dart';
+import 'package:open_belvpn/core/models/vpnStatus.dart';
+import 'package:open_belvpn/core/utils/nizvpn_engine.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:open_belvpn/screens/connect/connect.dart';
 // import 'package:loading_gifs/loading_gifs.dart';
 
 class ConnectScreen extends StatefulWidget {
@@ -10,6 +17,59 @@ class ConnectScreen extends StatefulWidget {
 }
 
 class _OneScreenState extends State<ConnectScreen> {
+  String _vpnState = NizVpn.vpnDisconnected;
+  List<VpnConfig> _listVpn = [];
+  VpnConfig _selectedVpn;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ///Add listener to update vpnstate
+    NizVpn.vpnStageSnapshot().listen((event) {
+      setState(() {
+        _vpnState = event;
+      });
+    });
+
+    ///Call initVpn
+    initVpn();
+  }
+
+  ///Here you can start fill the listVpn, for this simple app, i'm using free vpn from https://www.vpngate.net/
+  void initVpn() async {
+    _listVpn.add(VpnConfig(
+        config: await rootBundle.loadString("assets/vpn/nl.ovpn"),
+        name: "Netherlands"));
+    _listVpn.add(VpnConfig(
+        config: await rootBundle.loadString("assets/vpn/sg.ovpn"),
+        name: "Singapore"));
+    _listVpn.add(VpnConfig(
+        config: await rootBundle.loadString("assets/vpn/ca.ovpn"),
+        name: "Canada"));
+    if (mounted)
+      setState(() {
+        _selectedVpn = _listVpn.first;
+      });
+  }
+
+  void connectClick() {
+    ///Stop right here if user not select a vpn
+    if (_selectedVpn == null) return;
+
+    if (_vpnState == NizVpn.vpnDisconnected) {
+      ///Start if stage is disconnected
+      NizVpn.startVpn(
+        _selectedVpn,
+        // dns: DnsConfig("8.8.8.8", "8.8.4.4"),
+        dns: DnsConfig("23.253.163.53", "198.101.242.72"),
+      );
+    } else {
+      ///Stop if stage is "not" disconnected
+      NizVpn.stopVpn();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +121,7 @@ class _OneScreenState extends State<ConnectScreen> {
                           color: Color(0x99101010),
                           fontSize: 13,
                           fontWeight: FontWeight.w400)),
-                  MainScreen()
+                  // MainScreen()
                 ],
               ),
             ),
@@ -77,10 +137,63 @@ class _OneScreenState extends State<ConnectScreen> {
                       ),
                     ),
                     child: ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          _selectedVpn = _listVpn[0];
+                          connectClick();
+                        },
                         leading: Image.asset('assets/images/Oval.png'),
                         // ('assets/svg_icons/usa2.svg'),
-                        title: Text('United States',
+                        title: Text('Netherlands',
+                            style: GoogleFonts.lato(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500)),
+                        trailing:
+                            SvgPicture.asset('assets/svg_icons/stroke3.svg')),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE5E5EA),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16),
+                      ),
+                    ),
+                    child: ListTile(
+                        onTap: () {
+                          _selectedVpn = _listVpn[1];
+                          connectClick();
+                        },
+                        leading: Image.asset('assets/images/Oval.png'),
+                        // ('assets/svg_icons/usa2.svg'),
+                        title: Text('Singapore',
+                            style: GoogleFonts.lato(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500)),
+                        trailing:
+                            SvgPicture.asset('assets/svg_icons/stroke3.svg')),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE5E5EA),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16),
+                      ),
+                    ),
+                    child: ListTile(
+                        onTap: () {
+                          _selectedVpn = _listVpn[2];
+                          connectClick();
+                        },
+                        leading: Image.asset('assets/images/Oval.png'),
+                        // ('assets/svg_icons/usa2.svg'),
+                        title: Text('Canada',
                             style: GoogleFonts.lato(
                                 color: Colors.black,
                                 fontSize: 17,
