@@ -6,12 +6,12 @@
 import 'package:flutter/material.dart';
 import 'ui/screens/mainScreen.dart';
 
-import 'screens/main/main_screen.dart' as MainScreen2;
+import 'screens/main/main_off.dart' as MainScreen2;
 
 main() {
-  runApp(MaterialApp(home: Root()));
+  // runApp(MaterialApp(home: Root()));
 
-  // runApp(MainScreen2.MainScreen());
+  runApp(MainScreen2.MainOff());
 }
 
 class Root extends StatefulWidget {

@@ -3,15 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
+import 'package:open_belvpn/ui/screens/mainScreen.dart';
 
-class MainScreen extends StatefulWidget {
+class MainOff extends StatefulWidget {
   // const MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainOff> {
   int _selectedIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/ui/screens/mainScreen.dart';
 // import 'package:loading_gifs/loading_gifs.dart';
 
 class ConnectScreen extends StatefulWidget {
@@ -47,13 +48,12 @@ class _OneScreenState extends State<ConnectScreen> {
                       ],
                     ),
                     child: IconButton(
-                      icon: Icon(
-                        Icons.power_settings_new,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                      onPressed: () {},
-                    ),
+                        icon: Icon(
+                          Icons.power_settings_new,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                        onPressed: () {}),
                   ),
                   // Image.asset(cupertinoActivityIndicator, scale: i),
                   Text('TAP TO CONNECT',
@@ -61,6 +61,7 @@ class _OneScreenState extends State<ConnectScreen> {
                           color: Color(0x99101010),
                           fontSize: 13,
                           fontWeight: FontWeight.w400)),
+                  MainScreen()
                 ],
               ),
             ),
@@ -97,47 +98,50 @@ class _OneScreenState extends State<ConnectScreen> {
                   ),
                   width: MediaQuery.of(context).size.width - 16,
                   // height: 106,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ListTile(
-                        title: Text('Current IP: 193.84.63.60',
-                            style: GoogleFonts.lato(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500)),
-                        trailing: Text('Country: US',
-                            style: GoogleFonts.lato(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width - 80,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChangeLocation()),
-                            );
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          width: 2.5,
-                                          color: Color(0xFF007AFF))))),
-                          child: Text('Tap to change location',
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ListTile(
+                          title: Text('Current IP: 193.84.63.60',
+                              style: GoogleFonts.lato(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500)),
+                          trailing: Text('Country: US',
                               style: GoogleFonts.lato(
                                   color: Colors.black,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500)),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChangeLocation()),
+                              );
+                            },
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(
+                                            width: 2.5,
+                                            color: Color(0xFF007AFF))))),
+                            child: Text('Tap to change location',
+                                style: GoogleFonts.lato(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
