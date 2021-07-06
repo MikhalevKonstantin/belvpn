@@ -9,6 +9,8 @@ import 'package:open_belvpn/core/models/vpnStatus.dart';
 import 'package:open_belvpn/core/utils/nizvpn_engine.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:open_belvpn/screens/connect/connect.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 // import 'package:loading_gifs/loading_gifs.dart';
 
 class ConnectScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _OneScreenState extends State<ConnectScreen> {
   String _vpnState = NizVpn.vpnDisconnected;
   List<VpnConfig> _listVpn = [];
   VpnConfig _selectedVpn;
+  int show = 1;
 
   @override
   void initState() {
@@ -86,8 +89,6 @@ class _OneScreenState extends State<ConnectScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Expanded(
               child: Column(
@@ -107,13 +108,43 @@ class _OneScreenState extends State<ConnectScreen> {
                         ),
                       ],
                     ),
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.power_settings_new,
-                          color: Colors.white,
-                          size: 25,
-                        ),
-                        onPressed: () {}),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: (_vpnState == NizVpn.vpnDisconnected ||
+                                    _vpnState == NizVpn.vpnPrepare)
+                                ? SvgPicture.asset(
+                                    'assets/svg_icons/power.svg',
+                                    color: Colors.white,
+                                    height:
+                                        MediaQuery.of(context).size.width / 10,
+                                  )
+                                : _vpnState == NizVpn.vpnConnected
+                                    ? SvgPicture.asset(
+                                        'assets/svg_icons/connected.svg',
+                                        color: Colors.white,
+                                        height:
+                                            MediaQuery.of(context).size.width /
+                                                10,
+                                      )
+                                    : SpinKitRing(
+                                        color: Colors.white,
+                                        size:
+                                            MediaQuery.of(context).size.width /
+                                                10,
+                                        lineWidth: 3,
+                                      ),
+                            onPressed: () {
+                              _selectedVpn = _listVpn[0];
+                              connectClick();
+                            }),
+                        show == 3
+                            ? Text('Data',
+                                style: TextStyle(color: Colors.white))
+                            : Center()
+                      ],
+                    ),
                   ),
                   // Image.asset(cupertinoActivityIndicator, scale: i),
                   Text('TAP TO CONNECT',
@@ -121,62 +152,62 @@ class _OneScreenState extends State<ConnectScreen> {
                           color: Color(0x99101010),
                           fontSize: 13,
                           fontWeight: FontWeight.w400)),
-                  // MainScreen()
+                  MainScreen()
                 ],
               ),
             ),
             Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE5E5EA),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                    ),
-                    child: ListTile(
-                        onTap: () {
-                          _selectedVpn = _listVpn[0];
-                          connectClick();
-                        },
-                        leading: Image.asset('assets/images/Oval.png'),
-                        // ('assets/svg_icons/usa2.svg'),
-                        title: Text('Netherlands',
-                            style: GoogleFonts.lato(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500)),
-                        trailing:
-                            SvgPicture.asset('assets/svg_icons/stroke3.svg')),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE5E5EA),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                    ),
-                    child: ListTile(
-                        onTap: () {
-                          _selectedVpn = _listVpn[1];
-                          connectClick();
-                        },
-                        leading: Image.asset('assets/images/Oval.png'),
-                        // ('assets/svg_icons/usa2.svg'),
-                        title: Text('Singapore',
-                            style: GoogleFonts.lato(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500)),
-                        trailing:
-                            SvgPicture.asset('assets/svg_icons/stroke3.svg')),
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(bottom: 16),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Color(0xFFE5E5EA),
+                //       borderRadius: BorderRadius.all(
+                //         Radius.circular(16),
+                //       ),
+                //     ),
+                //     child: ListTile(
+                //         onTap: () {
+                //           _selectedVpn = _listVpn[0];
+                //           connectClick();
+                //         },
+                //         leading: Image.asset('assets/images/netherlands.png'),
+                //         // ('assets/svg_icons/usa2.svg'),
+                //         title: Text('Netherlands',
+                //             style: GoogleFonts.lato(
+                //                 color: Colors.black,
+                //                 fontSize: 17,
+                //                 fontWeight: FontWeight.w500)),
+                //         trailing:
+                //             SvgPicture.asset('assets/svg_icons/stroke3.svg')),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.only(bottom: 16),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Color(0xFFE5E5EA),
+                //       borderRadius: BorderRadius.all(
+                //         Radius.circular(16),
+                //       ),
+                //     ),
+                //     child: ListTile(
+                //         onTap: () {
+                //           _selectedVpn = _listVpn[1];
+                //           connectClick();
+                //         },
+                //         leading: Image.asset('assets/images/singapore.png'),
+                //         // ('assets/svg_icons/usa2.svg'),
+                //         title: Text('Singapore',
+                //             style: GoogleFonts.lato(
+                //                 color: Colors.black,
+                //                 fontSize: 17,
+                //                 fontWeight: FontWeight.w500)),
+                //         trailing:
+                //             SvgPicture.asset('assets/svg_icons/stroke3.svg')),
+                //   ),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 16),
                   child: Container(
@@ -191,7 +222,7 @@ class _OneScreenState extends State<ConnectScreen> {
                           _selectedVpn = _listVpn[2];
                           connectClick();
                         },
-                        leading: Image.asset('assets/images/Oval.png'),
+                        leading: Image.asset('assets/images/canada.png'),
                         // ('assets/svg_icons/usa2.svg'),
                         title: Text('Canada',
                             style: GoogleFonts.lato(
@@ -294,7 +325,84 @@ class _ChangeLocationState extends State<ChangeLocation> {
         automaticallyImplyLeading: true,
       ),
       body: Column(
-        children: [],
+        children: [
+          Image.asset('assets/images/netherlands.png'),
+          Text('Netherlands',
+              style: GoogleFonts.lato(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500)),
+          Text('Current location',
+              style: GoogleFonts.lato(
+                  color: Color(0x80101010),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400)),
+          Divider(
+            height: 1,
+            color: Color(0xffd1d1d6),
+          ),
+          ListTile(
+            trailing: Icon(
+              Icons.add_circle_rounded,
+              color: Color(0xff007aff),
+            ),
+            leading: Image.asset('assets/images/netherlands.png'),
+            subtitle: Text(
+              'Best for general browsing',
+              style: GoogleFonts.lato(
+                  color: Color(0x33000000),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400),
+            ),
+            title: Text(
+              'Netherlands(Auto)',
+              style: GoogleFonts.lato(
+                  color: Color(0xff101010),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          Text(
+            'Location(3)',
+            style: GoogleFonts.lato(
+                color: Color(0x33101010),
+                fontSize: 13,
+                fontWeight: FontWeight.w400),
+          ),
+          ListTile(
+            trailing: Icon(Icons.circle_outlined),
+            leading: Image.asset('assets/images/netherlands.png'),
+            title: Text(
+              'Netherlands',
+              style: GoogleFonts.lato(
+                  color: Color(0xff101010),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          ListTile(
+            trailing: Icon(Icons.circle_outlined),
+            leading: Image.asset('assets/images/singapore.png'),
+            title: Text(
+              'Singapore',
+              style: GoogleFonts.lato(
+                  color: Color(0xff101010),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          ListTile(
+            trailing: Icon(Icons.circle_outlined),
+            leading: Image.asset('assets/images/canada.png'),
+            title: Text(
+              'Canada',
+              style: GoogleFonts.lato(
+                  color: Color(0xff101010),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
       ),
     );
   }

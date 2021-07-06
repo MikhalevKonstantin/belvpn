@@ -32,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "id.nizwar.open_nizvpn"
+        applicationId "id.nizwar.open_belvpn"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
