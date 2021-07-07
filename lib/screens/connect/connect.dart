@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/screens/subscription/subscription.dart';
 import 'package:open_belvpn/ui/screens/mainScreen.dart';
-
+import 'package:open_belvpn/screens/main/main_off.dart' as main_off;
 import 'package:open_belvpn/core/models/dnsConfig.dart';
 import 'package:open_belvpn/core/models/vpnConfig.dart';
 import 'package:open_belvpn/core/models/vpnStatus.dart';
@@ -15,14 +16,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ConnectScreen extends StatefulWidget {
   @override
-  _OneScreenState createState() => _OneScreenState();
+  _ConnectScreenState createState() => _ConnectScreenState();
 }
 
-class _OneScreenState extends State<ConnectScreen> {
+class _ConnectScreenState extends State<ConnectScreen> {
   String _vpnState = NizVpn.vpnDisconnected;
   List<VpnConfig> _listVpn = [];
   VpnConfig _selectedVpn;
   int show = 1;
+  bool premium = false;
+
+  void buyPremium() {
+    premium = !premium;
+  }
 
   @override
   void initState() {
@@ -80,11 +86,21 @@ class _OneScreenState extends State<ConnectScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(' VPN Security',
-            style: GoogleFonts.lato(
-                color: Colors.black,
-                fontSize: 19,
-                fontWeight: FontWeight.bold)),
+        title: Row(
+          children: [
+            Text(' VPN Security',
+                style: GoogleFonts.lato(
+                    color: Colors.black,
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold)),
+            if (premium)
+              Text(' Premium',
+                  style: GoogleFonts.lato(
+                      color: Color(0xFF007aff),
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -233,6 +249,7 @@ class _OneScreenState extends State<ConnectScreen> {
                             SvgPicture.asset('assets/svg_icons/stroke3.svg')),
                   ),
                 ),
+
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xFFE5E5EA),
@@ -247,47 +264,79 @@ class _OneScreenState extends State<ConnectScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ListTile(
-                          title: Text('Current IP: 193.84.63.60',
-                              style: GoogleFonts.lato(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500)),
-                          trailing: Text('Country: US',
-                              style: GoogleFonts.lato(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 80,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChangeLocation()),
-                              );
-                            },
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        side: BorderSide(
-                                            width: 2.5,
-                                            color: Color(0xFF007AFF))))),
-                            child: Text('Tap to change location',
+                        if (premium)
+                          ListTile(
+                            title: Text('Current IP: 193.84.63.60',
+                                style: GoogleFonts.lato(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)),
+                            trailing: Text('Country: US',
                                 style: GoogleFonts.lato(
                                     color: Colors.black,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500)),
                           ),
-                        ),
+                        if (premium)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 80,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChangeLocation()),
+                                );
+                              },
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 2.5,
+                                              color: Color(0xFF007AFF))))),
+                              child: Text('Tap to change location',
+                                  style: GoogleFonts.lato(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        if (!premium) Text('19 MB of 50 MB used'),
+                        if (!premium) Text('percent indicator'),
+                        if (!premium)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 80,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Subscription()),
+                                );
+                              },
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 2.5,
+                                              color: Color(0xFF007AFF))))),
+                              child: Text('Upgrade',
+                                  style: GoogleFonts.lato(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
                       ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ],

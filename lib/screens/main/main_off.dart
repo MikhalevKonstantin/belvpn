@@ -14,6 +14,7 @@ class MainOff extends StatefulWidget {
 
 class _MainScreenState extends State<MainOff> {
   int _selectedIndex = 0;
+  static bool premium = false;
 
   static List<Widget> _widgetOptions = <Widget>[
     ConnectScreen(),
