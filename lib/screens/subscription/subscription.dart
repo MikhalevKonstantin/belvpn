@@ -4,13 +4,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
 
 class Subscription extends StatefulWidget {
-  Subscription({Key key}) : super(key: key);
+  Subscription({
+    Key key,
+    this.onPurchased,
+  }) : super(key: key);
+
+  final Function() onPurchased;
 
   @override
   _SubscriptionState createState() => _SubscriptionState();
 }
 
 class _SubscriptionState extends State<Subscription> {
+  bool monthly = true;
+
+  void setMonthly() {
+    monthly = true;
+  }
+
+  void setYearly() {
+    monthly = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +41,7 @@ class _SubscriptionState extends State<Subscription> {
               Icons.close,
               color: Colors.black,
             ),
-            onPressed: () => Navigator.of(context).pop,
+            onPressed: () => Navigator.pop(context),
           ),
           title: Text(' VPN Security',
               style: GoogleFonts.lato(
@@ -78,13 +93,25 @@ class _SubscriptionState extends State<Subscription> {
                           padding: EdgeInsets.only(top: 6, bottom: 6),
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              primary: Color(0xFF007AFF), //0xFF007AFF
-                              backgroundColor:
-                                  Color(0xFFF2F2F7), //0xFFE7E7EC 0xFFF2F2F7
+                              // primary: Color(0xFF007AFF), //0xFF007AFF
+                              backgroundColor: monthly
+                                  ? Color(0xFFF2F2F7)
+                                  : Color(0xFFE7E7EC),
+                              //0xFFE7E7EC gray 0xFFF2F2F7 white
                               elevation: 4,
                               minimumSize: Size(54.0, 54.0),
+
+                              side: BorderSide(
+                                  color: monthly
+                                      ? Color(0xFF007AFF)
+                                      : Color(0xFFE7E7EC),
+                                  width: 1.5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                monthly = true;
+                              });
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -105,10 +132,27 @@ class _SubscriptionState extends State<Subscription> {
                         Padding(
                           padding: EdgeInsets.only(top: 6, bottom: 6),
                           child: OutlinedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(16.0),
+                            style: OutlinedButton.styleFrom(
+                              primary: Color(0xFF007AFF),
+                              //0xFF007AFF
+                              backgroundColor: !monthly
+                                  ? Color(0xFFF2F2F7)
+                                  : Color(0xFFE7E7EC),
+                              //0xFFE7E7EC gray 0xFFF2F2F7 white
+                              elevation: 4,
+                              minimumSize: Size(54.0, 54.0),
+
+                              side: BorderSide(
+                                  color: !monthly
+                                      ? Color(0xFF007AFF)
+                                      : Color(0xFFE7E7EC),
+                                  width: 1.5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                monthly = false;
+                              });
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -137,7 +181,13 @@ class _SubscriptionState extends State<Subscription> {
                       style: TextButton.styleFrom(
                           backgroundColor: Color(0xFF007AFF),
                           padding: EdgeInsets.only(top: 16, bottom: 16)),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          widget.onPurchased();
+                        });
+
+                        // Navigator.pop(context);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

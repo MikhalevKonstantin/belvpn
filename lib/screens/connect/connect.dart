@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/screens/connect/ip.dart';
 import 'package:open_belvpn/screens/subscription/subscription.dart';
 import 'package:open_belvpn/ui/screens/mainScreen.dart';
 import 'package:open_belvpn/screens/main/main_off.dart' as main_off;
@@ -11,10 +12,18 @@ import 'package:open_belvpn/core/utils/nizvpn_engine.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:dart_ipify/dart_ipify.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 // import 'package:loading_gifs/loading_gifs.dart';
 
 class ConnectScreen extends StatefulWidget {
+  ConnectScreen({
+    Key key,
+    this.onPurchased,
+  }) : super(key: key);
+  bool premium = false;
+  final Function() onPurchased;
+
   @override
   _ConnectScreenState createState() => _ConnectScreenState();
 }
@@ -27,22 +36,34 @@ class _ConnectScreenState extends State<ConnectScreen> {
   bool premium = false;
 
   void buyPremium() {
-    premium = !premium;
+    setState(() {
+      premium = !premium;
+    });
   }
 
   @override
   void initState() {
-    super.initState();
-
     ///Add listener to update vpnstate
     NizVpn.vpnStageSnapshot().listen((event) {
+      print('stage snapshot update');
       setState(() {
         _vpnState = event;
+        print('${_vpnState}');
+      });
+    });
+
+    NizVpn.vpnStatusSnapshot().listen((event) {
+      print('status snapshot update');
+      setState(() {
+        //_vpnState = event.toString();
+        print('${event}');
       });
     });
 
     ///Call initVpn
     initVpn();
+
+    super.initState();
   }
 
   ///Here you can start fill the listVpn, for this simple app, i'm using free vpn from https://www.vpngate.net/
@@ -76,6 +97,56 @@ class _ConnectScreenState extends State<ConnectScreen> {
     } else {
       ///Stop if stage is "not" disconnected
       NizVpn.stopVpn();
+    }
+  }
+
+  static const String vpnConnected = "connected";
+  static const String vpnDisconnected = "disconnected";
+  static const String vpnWaitConnection = "wait_connection";
+  static const String vpnAuthenticating = "authenticating";
+  static const String vpnReconnect = "reconnect";
+  static const String vpnNoConnection = "no_connection";
+  static const String vpnConnecting = "connecting";
+  static const String vpnPrepare = "prepare";
+  static const String vpnDenied = "denied";
+
+  buildSvgIcon(String iconName) {
+    return SvgPicture.asset(
+      'assets/svg_icons/$iconName',
+      color: Colors.white,
+      height: MediaQuery.of(context).size.width / 10,
+    );
+  }
+
+  buildVpnStatus(String vpnState) {
+    switch (vpnState) {
+      case vpnConnected:
+        return buildSvgIcon('connected.svg');
+        break;
+      case vpnNoConnection:
+      case vpnDenied:
+      case vpnDisconnected:
+        return buildSvgIcon('power.svg');
+        break;
+      // these states return same widget, no break needed:
+      case vpnConnecting:
+      case vpnWaitConnection:
+      case vpnPrepare:
+      case vpnAuthenticating:
+      case vpnReconnect:
+        return SpinKitRing(
+          color: Colors.white,
+          size: MediaQuery.of(context).size.width / 10,
+          lineWidth: 3,
+        );
+        break;
+      default:
+        return SpinKitRing(
+          color: Colors.white,
+          size: MediaQuery.of(context).size.width / 10,
+          lineWidth: 3,
+        );
+        break;
     }
   }
 
@@ -128,33 +199,12 @@ class _ConnectScreenState extends State<ConnectScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                            icon: (_vpnState == NizVpn.vpnDisconnected ||
-                                    _vpnState == NizVpn.vpnPrepare)
-                                ? SvgPicture.asset(
-                                    'assets/svg_icons/power.svg',
-                                    color: Colors.white,
-                                    height:
-                                        MediaQuery.of(context).size.width / 10,
-                                  )
-                                : _vpnState == NizVpn.vpnConnected
-                                    ? SvgPicture.asset(
-                                        'assets/svg_icons/connected.svg',
-                                        color: Colors.white,
-                                        height:
-                                            MediaQuery.of(context).size.width /
-                                                10,
-                                      )
-                                    : SpinKitRing(
-                                        color: Colors.white,
-                                        size:
-                                            MediaQuery.of(context).size.width /
-                                                10,
-                                        lineWidth: 3,
-                                      ),
-                            onPressed: () {
-                              _selectedVpn = _listVpn[0];
-                              connectClick();
-                            }),
+                          icon: buildVpnStatus(_vpnState),
+                          onPressed: () {
+                            _selectedVpn = _listVpn[0];
+                            connectClick();
+                          },
+                        ),
                         show == 3
                             ? Text('Data',
                                 style: TextStyle(color: Colors.white))
@@ -264,19 +314,20 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        if (premium)
-                          ListTile(
-                            title: Text('Current IP: 193.84.63.60',
-                                style: GoogleFonts.lato(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500)),
-                            trailing: Text('Country: US',
-                                style: GoogleFonts.lato(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500)),
-                          ),
+                        if (premium) GetIP(),
+
+                        // ListTile(
+                        //   title: Text('Current IP: 193.84.63.60',
+                        //       style: GoogleFonts.lato(
+                        //           color: Colors.black,
+                        //           fontSize: 13,
+                        //           fontWeight: FontWeight.w500)),
+                        //   trailing: Text('Country: US',
+                        //       style: GoogleFonts.lato(
+                        //           color: Colors.black,
+                        //           fontSize: 13,
+                        //           fontWeight: FontWeight.w500)),
+                        // ),
                         if (premium)
                           SizedBox(
                             width: MediaQuery.of(context).size.width - 80,
@@ -304,17 +355,41 @@ class _ConnectScreenState extends State<ConnectScreen> {
                                       fontWeight: FontWeight.w500)),
                             ),
                           ),
-                        if (!premium) Text('19 MB of 50 MB used'),
-                        if (!premium) Text('percent indicator'),
+                        if (!premium)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Text('19 MB of 50 MB used',
+                                style: GoogleFonts.lato(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        if (!premium)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: LinearPercentIndicator(
+                              width: MediaQuery.of(context).size.width - 64,
+                              lineHeight: 14.0,
+                              percent: 0.4,
+                              progressColor: Colors.blue,
+                            ),
+                          ),
+
                         if (!premium)
                           SizedBox(
-                            width: MediaQuery.of(context).size.width - 80,
+                            width: MediaQuery.of(context).size.width - 64,
                             child: TextButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Subscription()),
+                                    builder: (context) => Subscription(
+                                      onPurchased: () {
+                                        buyPremium();
+                                        print('premium now is $premium');
+                                      },
+                                    ),
+                                  ),
                                 );
                               },
                               style: ButtonStyle(

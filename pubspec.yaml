@@ -14,6 +14,9 @@ dependencies:
   flutter_svg: ^0.22.0
   loading_gifs: ^0.3.0
   flutter_spinkit: ^4.1.2
+  dart_ipify: ^1.0.2
+  percent_indicator: ^2.1.7+2
+
 
 
 dev_dependencies:
