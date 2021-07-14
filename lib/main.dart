@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'ui/screens/mainScreen.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 import 'screens/main/main_off.dart' as MainScreen2;
 
 main() {
   // runApp(MaterialApp(home: Root()));
+  // if (defaultTargetPlatform == TargetPlatform.android) {
+  InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  // }
 
   runApp(MainScreen2.MainOff());
 }

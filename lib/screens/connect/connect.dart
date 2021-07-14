@@ -219,7 +219,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           color: Color(0x99101010),
                           fontSize: 13,
                           fontWeight: FontWeight.w400)),
-                  MainScreen()
+                  // MainScreen()
                 ],
               ),
             ),
