@@ -50,14 +50,6 @@ class IpAddressBloc extends Cubit<String>{
 
 
   refresh() async {
-   // emit(null);
-   //  final balance = await Ipify.balance('at_BfFn5Fg6iMjEOCn6RT8X1FGET6DD1');
-   //  print(balance);
-   //  Ipify.ipv64();
-
-   //  final ip = await Ipify.ipv64();//Ipify.geo('at_BfFn5Fg6iMjEOCn6RT8X1FGET6DD1');
-   //  print('new ip is ${ip}');
-   //  emit(" ${ip}: ${ip}");
 
     // final ip = await IpAddress().getIp();//Ipify.geo('at_BfFn5Fg6iMjEOCn6RT8X1FGET6DD1');
 

@@ -97,6 +97,19 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
         }
       }
     });
+
+    selectedServerBloc.stream.listen((event) {
+      final proState = proBloc.state;
+
+      if(proState is Ready){
+        if(proState.isPro){
+          _reconnect();
+        } else {
+          // should show dialog in ui
+        }
+      }
+
+    });
   }
 
   get currentVpnConfig => VpnConfig(
@@ -106,9 +119,10 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
   connect() => _connect();
 
   rotateServer() {
-   // add(RotateServerEvent());
+    // add(RotateServerEvent());
 
     _rotateServer();
+    _reconnect();
   }
 
   _rotateServer() async {
@@ -124,7 +138,9 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
     print('stopped');
 
     selectedServerBloc.select(list[index]);
+  }
 
+  _reconnect() async {
     // await _statusSubscription.cancel();
     // await _stagesSubscription.cancel();
 
@@ -135,10 +151,10 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
 
 
     print('changed server config');
-    // _connect();
+
     await Future.delayed(Duration(milliseconds: 33));
     print('1 second passed, initating connection to ${selectedServerBloc.state.country}');
-    // _connect();
+
 
     _connect();
     print('connect finished');

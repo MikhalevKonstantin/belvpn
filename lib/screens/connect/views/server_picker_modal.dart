@@ -125,6 +125,7 @@ class _ServerPickerState extends State<ServerPicker> {
                     lastIndex = nextIndex;
                     nextIndex = i;
 
+                    // todo: show dialog for non-pro insrtead of connecting
                     widget.onChanged(widget.servers[i]);
                     // print(value);
                   },

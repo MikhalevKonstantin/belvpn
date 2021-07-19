@@ -124,7 +124,15 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         servers: state.servers,
                         selected: st,
                         onChanged: (serverInfo) {
-                          vpnBloc.selectedServerBloc.select(serverInfo);
+                          // todo: show purchase dialog if not pro
+                          final proState = BlocProvider.of<VpnBloc>(ctx, listen: false).proBloc.state;
+                          if(proState is Ready && proState.isPro){
+                            vpnBloc.selectedServerBloc.select(serverInfo);
+                          } else {
+
+                            // show dialog
+                          }
+
                         },
                       );
                     },
