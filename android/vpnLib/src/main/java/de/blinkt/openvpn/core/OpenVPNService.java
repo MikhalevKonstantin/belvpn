@@ -55,6 +55,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.List;
 
 import de.blinkt.openvpn.DisconnectVPNActivity;
 import de.blinkt.openvpn.LaunchVPN;
@@ -1266,6 +1267,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     @Override
     public void updateByteCount(long in, long out, long diffIn, long diffOut) {
         TotalTraffic.calcTraffic(this, in, out, diffIn, diffOut);
+        // gets total [in,out]
+        List<Long> totalTraffic = TotalTraffic.getRawTotalTraffic(this,in,out);
+
         if (mDisplayBytecount) {
             String netstat = String.format(getString(R.string.statusline_bytecount),
                     humanReadableByteCount(in, false, getResources()),
@@ -1286,7 +1290,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             hours = convertTwoDigit((int) ((time / (1000 * 60 * 60)) % 24));
             duration = hours + ":" + minutes + ":" + seconds;
             lastPacketReceive = checkPacketReceive(lastPacketReceive);
-            sendMessage(duration, String.valueOf(lastPacketReceive), byteIn, byteOut);
+            sendMessage(duration, String.valueOf(lastPacketReceive), byteIn, byteOut, diffIn, diffOut,in,out, totalTraffic.get(0),totalTraffic.get(1));
         }
 
     }
@@ -1405,12 +1409,18 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     }
 
     //sending message to main activity
-    private void sendMessage(String duration, String lastPacketReceive, String byteIn, String byteOut) {
+    private void sendMessage(String duration, String lastPacketReceive, String byteIn, String byteOut,long diffIn,long diffOut,long in,long out, long totalIn, long totalOut) {
         Intent intent = new Intent("connectionState");
         intent.putExtra("duration", duration);
         intent.putExtra("lastPacketReceive", lastPacketReceive);
         intent.putExtra("byteIn", byteIn);
         intent.putExtra("byteOut", byteOut);
+        intent.putExtra("diffOut", diffOut);
+        intent.putExtra("diffIn", diffIn);
+        intent.putExtra("out", out);
+        intent.putExtra("in", in);
+        intent.putExtra("totalIn", totalIn);
+        intent.putExtra("totalOut", totalOut);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
 import 'package:open_belvpn/ui/screens/mainScreen.dart';
@@ -28,37 +30,41 @@ class _MainScreenState extends State<MainOff> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Colors.black,
-          unselectedItemColor: Color(0x66101010),
-          selectedItemColor: Color(0xFF101010),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg_icons/home.svg',
-                  color: _selectedIndex == 0
-                      ? Color(0xFF101010)
-                      : Color(0x66101010),
-                ),
-                label: '1'),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/svg_icons/setting.svg',
-                  color: _selectedIndex == 1
-                      ? Color(0xFF101010)
-                      : Color(0x66101010),
-                ),
-                label: '2'),
-          ],
+    return BlocProvider<VpnBloc>(
+
+      create: (_) => VpnBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            // backgroundColor: Colors.black,
+            unselectedItemColor: Color(0x66101010),
+            selectedItemColor: Color(0xFF101010),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            items: [
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/svg_icons/home.svg',
+                    color: _selectedIndex == 0
+                        ? Color(0xFF101010)
+                        : Color(0x66101010),
+                  ),
+                  label: '1'),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/svg_icons/setting.svg',
+                    color: _selectedIndex == 1
+                        ? Color(0xFF101010)
+                        : Color(0x66101010),
+                  ),
+                  label: '2'),
+            ],
+          ),
+          body: _widgetOptions.elementAt(_selectedIndex),
         ),
-        body: _widgetOptions.elementAt(_selectedIndex),
       ),
     );
   }

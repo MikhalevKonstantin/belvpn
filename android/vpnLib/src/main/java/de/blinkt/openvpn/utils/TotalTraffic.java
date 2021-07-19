@@ -56,6 +56,21 @@ public class TotalTraffic {
         return totalTraffic;
     }
 
+    public static List<Long> getRawTotalTraffic(Context context, long in, long out) {
+        List<Long> totalTraffic = new ArrayList<Long>();
+
+        if (inTotal == 0)
+            inTotal = PropertiesService.getDownloaded(context);
+
+        if (outTotal == 0)
+            outTotal = PropertiesService.getUploaded(context);
+
+        totalTraffic.add(inTotal);
+        totalTraffic.add(outTotal);
+
+        return totalTraffic;
+    }
+
     public static void saveTotal(Context context) {
         if (inTotal != 0)
             PropertiesService.setDownloaded(context, inTotal);

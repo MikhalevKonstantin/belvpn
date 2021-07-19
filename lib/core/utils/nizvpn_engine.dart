@@ -4,11 +4,13 @@
  */
 
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:open_belvpn/core/models/dnsConfig.dart';
-import '../models/vpnStatus.dart';
-import '../models/vpnConfig.dart';
 import 'package:package_info/package_info.dart';
+
+import '../models/vpnConfig.dart';
+import '../models/vpnStatus.dart';
 
 class NizVpn {
   ///Channel to native
@@ -24,17 +26,18 @@ class NizVpn {
   static Stream<VpnStatus> vpnStatusSnapshot() =>
       EventChannel(_eventChannelVpnStatus)
           .receiveBroadcastStream()
-          .map((event) => VpnStatus.fromJson(jsonDecode(event)))
-          .cast();
+          .map((event) {
+        return VpnStatus.fromJson(jsonDecode(event));
+      }).cast();
 
   ///Start VPN easily
   static Future<void> startVpn(VpnConfig vpnConfig,
       {DnsConfig dns, List<String> bypassPackages}) async {
     final package = await PackageInfo.fromPlatform();
     if (bypassPackages == null) {
-      bypassPackages = [package.packageName];
+     bypassPackages = [];//[package.packageName];
     } else {
-      bypassPackages.add(package.packageName);
+      // bypassPackages.add(package.packageName);
     }
     return MethodChannel(_methodChannelVpnControl).invokeMethod(
       "start",

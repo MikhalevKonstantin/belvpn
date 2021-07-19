@@ -11,18 +11,23 @@ class VpnStatus extends Model {
     this.lastPacketReceive = '',
     this.byteIn = '',
     this.byteOut = '',
+    this.totalIn = 0,
+    this.totalOut = 0,
   });
 
   String duration;
   String lastPacketReceive;
   String byteIn;
   String byteOut;
+  int totalIn, totalOut;
 
   factory VpnStatus.fromJson(Map<String, dynamic> json) => VpnStatus(
         duration: json["duration"],
         lastPacketReceive: json["last_packet_receive"],
         byteIn: json["byte_in"],
         byteOut: json["byte_out"],
+        totalOut: json["totalOut"],
+        totalIn: json["totalIn"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -30,5 +35,7 @@ class VpnStatus extends Model {
         "last_packet_receive": lastPacketReceive,
         "byte_in": byteIn,
         "byte_out": byteOut,
+        "totalOut": totalIn,
+        "totalIn": totalOut,
       };
 }

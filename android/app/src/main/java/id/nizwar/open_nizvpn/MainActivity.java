@@ -103,18 +103,34 @@ public class MainActivity extends FlutterActivity {
                         String lastPacketReceive = intent.getStringExtra("lastPacketReceive");
                         String byteIn = intent.getStringExtra("byteIn");
                         String byteOut = intent.getStringExtra("byteOut");
+                        long diffIn = intent.getLongExtra("diffIn",0l);
+                        long diffOut = intent.getLongExtra("diffOut",0l);
+                        long in = intent.getLongExtra("in",0l);
+                        long out = intent.getLongExtra("out",0l);
+                        long totalIn = intent.getLongExtra("totalIn",0l);
+                        long totalOut = intent.getLongExtra("totalOut",0l);
 
                         if (duration == null) duration = "00:00:00";
                         if (lastPacketReceive == null) lastPacketReceive = "0";
                         if (byteIn == null) byteIn = " ";
                         if (byteOut == null) byteOut = " ";
 
+//                        if (diffIn == null) diffIn = 0l;
+//                        if (diffOut == null) diffOut = 0l;
+//                        if (in == null) in = 0l;
+//                        if (out == null) out = 0l;
+
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("duration", duration);
                         jsonObject.put("last_packet_receive", lastPacketReceive);
                         jsonObject.put("byte_in", byteIn);
                         jsonObject.put("byte_out", byteOut);
-
+                        jsonObject.put("diffIn", diffIn);
+                        jsonObject.put("diffOut", diffOut);
+                        jsonObject.put("in", in);
+                        jsonObject.put("out", out);
+                        jsonObject.put("totalIn", totalIn);
+                        jsonObject.put("totalOut", totalOut);
                         localJson = jsonObject;
 
                         if (attached) vpnStatusSink.success(jsonObject.toString());
@@ -124,6 +140,50 @@ public class MainActivity extends FlutterActivity {
                 }
             }
         }, new IntentFilter("connectionState"));
+
+
+//        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                String stage = intent.getStringExtra("state");
+//                if (stage != null) setStage(stage);
+//
+//                if (vpnStatusSink != null) {
+//                    try {
+//
+//                        long diffIn = intent.getStringExtra("diffIn");
+//                        long diffOut = intent.getStringExtra("diffOut");
+//                        long in = intent.getStringExtra("in");
+//                        long out = intent.getStringExtra("out");
+//
+//                        if (duration == null) duration = "00:00:00";
+//                        if (lastPacketReceive == null) lastPacketReceive = "0";
+//                        if (byteIn == null) byteIn = " ";
+//                        if (byteOut == null) byteOut = " ";
+//
+//                        if (diffIn == null) diffIn = 0l;
+//                        if (diffOut == null) diffOut = 0l;
+//                        if (in == null) in = 0l;
+//                        if (out == null) out = 0l;
+//
+//                        JSONObject jsonObject = new JSONObject();
+//                        jsonObject.put("duration", duration);
+//                        jsonObject.put("last_packet_receive", lastPacketReceive);
+//                        jsonObject.put("byte_in", byteIn);
+//                        jsonObject.put("byte_out", byteOut);
+//                        jsonObject.put("diffIn", diffIn);
+//                        jsonObject.put("diffOut", diffOut);
+//                        jsonObject.put("in", in);
+//                        jsonObject.put("out", out);
+//                        localJson = jsonObject;
+//
+//                        if (attached) vpnStatusSink.success(jsonObject.toString());
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }, new IntentFilter("total_traffic"));
         super.onCreate(savedInstanceState);
     }
 

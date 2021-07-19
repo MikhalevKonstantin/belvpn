@@ -5,7 +5,6 @@ import 'screens/main/main_off.dart' as MainScreen2;
 
 main() {
   // runApp(MaterialApp(home: Root()));
-
   runApp(MainScreen2.MainOff());
 }
 

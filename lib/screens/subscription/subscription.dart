@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:open_belvpn/screens/connect/connect.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
+import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 
 class Subscription extends StatefulWidget {
   Subscription({
     Key key,
-    this.onPurchased,
+    this.onPurchasedMonthly,
+    this.onPurchasedYearly,
   }) : super(key: key);
 
-  final Function() onPurchased;
+  final Function onPurchasedMonthly;
+  final Function onPurchasedYearly;
 
   @override
   _SubscriptionState createState() => _SubscriptionState();
@@ -87,91 +91,102 @@ class _SubscriptionState extends State<Subscription> {
                       ],
                     ),
                     // TODO buttons
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 6, bottom: 6),
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              // primary: Color(0xFF007AFF), //0xFF007AFF
-                              backgroundColor: monthly
-                                  ? Color(0xFFF2F2F7)
-                                  : Color(0xFFE7E7EC),
-                              //0xFFE7E7EC gray 0xFFF2F2F7 white
-                              elevation: 4,
-                              minimumSize: Size(54.0, 54.0),
+                    StreamBuilder<ProState>(
+                        stream:
+                            BlocProvider.of<VpnBloc>(context).proBloc.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot is Ready) {
+                            return Text('pro already');
+                          }
 
-                              side: BorderSide(
-                                  color: monthly
-                                      ? Color(0xFF007AFF)
-                                      : Color(0xFFE7E7EC),
-                                  width: 1.5),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                monthly = true;
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Monthly',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF101010))),
-                                Text("\$7.99",
-                                    style: GoogleFonts.lato(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF101010))),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 6, bottom: 6),
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              primary: Color(0xFF007AFF),
-                              //0xFF007AFF
-                              backgroundColor: !monthly
-                                  ? Color(0xFFF2F2F7)
-                                  : Color(0xFFE7E7EC),
-                              //0xFFE7E7EC gray 0xFFF2F2F7 white
-                              elevation: 4,
-                              minimumSize: Size(54.0, 54.0),
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 6, bottom: 6),
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    // primary: Color(0xFF007AFF), //0xFF007AFF
+                                    backgroundColor: monthly
+                                        ? Color(0xFFF2F2F7)
+                                        : Color(0xFFE7E7EC),
+                                    //0xFFE7E7EC gray 0xFFF2F2F7 white
+                                    elevation: 4,
+                                    minimumSize: Size(54.0, 54.0),
 
-                              side: BorderSide(
-                                  color: !monthly
-                                      ? Color(0xFF007AFF)
-                                      : Color(0xFFE7E7EC),
-                                  width: 1.5),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                monthly = false;
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Yearly',
-                                    style: GoogleFonts.lato(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF101010))),
-                                Text("\$49.99",
-                                    style: GoogleFonts.lato(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF101010))),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                                    side: BorderSide(
+                                        color: monthly
+                                            ? Color(0xFF007AFF)
+                                            : Color(0xFFE7E7EC),
+                                        width: 1.5),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      monthly = true;
+                                    });
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Monthly',
+                                          style: GoogleFonts.lato(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101010))),
+                                      Text("\$7.99",
+                                          style: GoogleFonts.lato(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF101010))),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 6, bottom: 6),
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    primary: Color(0xFF007AFF),
+                                    //0xFF007AFF
+                                    backgroundColor: !monthly
+                                        ? Color(0xFFF2F2F7)
+                                        : Color(0xFFE7E7EC),
+                                    //0xFFE7E7EC gray 0xFFF2F2F7 white
+                                    elevation: 4,
+                                    minimumSize: Size(54.0, 54.0),
+
+                                    side: BorderSide(
+                                        color: !monthly
+                                            ? Color(0xFF007AFF)
+                                            : Color(0xFFE7E7EC),
+                                        width: 1.5),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      monthly = false;
+                                    });
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Yearly',
+                                          style: GoogleFonts.lato(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101010))),
+                                      Text("\$49.99",
+                                          style: GoogleFonts.lato(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF101010))),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
                     Text("Plan automatically renews weekly untill cancelled.",
                         style: GoogleFonts.lato(
                             fontSize: 11,
@@ -182,10 +197,18 @@ class _SubscriptionState extends State<Subscription> {
                           backgroundColor: Color(0xFF007AFF),
                           padding: EdgeInsets.only(top: 16, bottom: 16)),
                       onPressed: () {
-                        setState(() {
-                          widget.onPurchased();
-                        });
+                        if (monthly) {
+                          // widget.onPurchasedMonthly();
+                          BlocProvider.of<VpnBloc>(context)
+                              .proBloc
+                              .purchaseProMonthly();
 
+                        } else {
+                          // widget.onPurchasedYearly();
+                          BlocProvider.of<VpnBloc>(context)
+                              .proBloc
+                              .purchaseProYearly();
+                        }
                         // Navigator.pop(context);
                       },
                       child: Row(
