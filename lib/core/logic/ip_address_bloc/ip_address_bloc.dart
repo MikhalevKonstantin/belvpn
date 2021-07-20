@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dart_ipify/dart_ipify.dart';
-import 'package:dio/dio.dart';
-import 'package:get_ip_address/get_ip_address.dart';
 
 // abstract class IpAddressEvent {}
 //
@@ -54,7 +52,8 @@ class IpAddressBloc extends Cubit<String>{
     // final ip = await IpAddress().getIp();//Ipify.geo('at_BfFn5Fg6iMjEOCn6RT8X1FGET6DD1');
 
     await Future.delayed(Duration(milliseconds: 2000));
-    final ip = await Dio().get('https://api64.ipify.org');
+    // final ip = await Dio().get('https://api64.ipify.org');
+    final ip = await Ipify.ipv4();
     //
     print('new ip i ${ip}');
     emit(" ${ip}");

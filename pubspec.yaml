@@ -24,10 +24,7 @@ dependencies:
   firebase_storage:
   flutter_inapp_purchase:
   localstorage:
-  get_ip_address:
-  dio:
-  webview_flutter:
-  http:
+  firebase_remote_config: "^0.10.0+3"
 
 dev_dependencies:
   flutter_test:

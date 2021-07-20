@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class IpAddressView extends StatelessWidget {
   IpAddressView({Key key}) : super(key: key);
@@ -17,7 +16,7 @@ class IpAddressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).ipAddressBloc,
       builder: (context, ip) {
@@ -44,7 +43,6 @@ class IpAddressView extends StatelessWidget {
                       fontWeight: FontWeight.w200,
                     ),
                   ),
-
                 ],
               ),
             ),

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ServersRepository {
-  Firestore dataProvider = Firestore.instance;
-  FirebaseStorage storage = FirebaseStorage();
+  FirebaseFirestore dataProvider = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   static const String kTopic = "ovpn";
   static const String collectionName = "ovpn";
@@ -11,28 +11,24 @@ class ServersRepository {
   Future<List<ServerInfo>> fetchTopics() async {
     String path = '$kTopic';
 
-    final response =
-        await dataProvider.collection(path).getDocuments().catchError((err) {
-      print(err);
-    });
+    final querySnapshot =
+        await dataProvider.collection(path).get() /*.catchError(onError)*/;
 
     // load servers collection and map doc -> List<ServerInfo>
-    List<ServerInfo> servers =
-        await Future.wait(response.documents.map((doc) async {
-
+    final servers =
+        await Future.wait(querySnapshot.docs.map((doc) async {
       // get url from gs:// link
-      final StorageReference flagReference =
-          await storage.getReferenceFromUrl(doc.data['flag']);
-      final flagUrl = await flagReference.getDownloadURL();
+      final flagRef = storage.refFromURL(doc['flag']);
+      final flagUrl = await flagRef.getDownloadURL();
 
       return ServerInfo(
-        country: doc.data['country'],
-        config: doc.data['config'],
+        country: doc['country'],
+        config: doc['config'],
         flag: flagUrl,
       );
     }).toList());
 
-    print(servers);
+    print('Servers list fetched');
     return servers;
   }
 }
