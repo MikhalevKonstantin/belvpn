@@ -8,17 +8,18 @@ class ProBloc extends Bloc<ProEvent, ProState> {
   ProBloc() : super(Loading());
 
   init() async {
+    print('ProBloc initializing');
     var item = await _findProPurchase();
 
-    FlutterInappPurchase.purchaseUpdated.listen((event) async {
-      final purchased =
-          await FlutterInappPurchase.instance.getPurchaseHistory();
-
-      print(purchased);
-
-      final purchase = purchased.lastWhere(
-          (p) => p.productId == 'monthly' || p.productId == 'monthly');
-
+    FlutterInappPurchase.purchaseUpdated.listen((item) async {
+      // final purchased =
+      //     await FlutterInappPurchase.instance.getPurchaseHistory();
+      //
+      //
+      // print(purchased);
+      //
+      // final purchase = purchased.lastWhere(
+      //     (p) => p.productId == 'monthly' || p.productId == 'yearly');
 
       //
       // if(purchase==true){
@@ -27,13 +28,15 @@ class ProBloc extends Bloc<ProEvent, ProState> {
       //   yield Ready(isPro: false);
       // }
 
-      final productId = purchase.productId;
+      final pId = item.productId;
+      final pToken = item.purchaseToken;
 
       LocalStorage storage = LocalStorage('pro');
       await storage.ready;
-      storage.setItem('purchaseKey', purchased[0].purchaseToken);
 
-      add(ProLoaded(purchase != null));
+      storage.setItem('purchaseKey', item.purchaseToken);
+
+      add(ProLoaded(item != null));
     });
 
     FlutterInappPurchase.purchaseError.listen((event) {
@@ -67,11 +70,11 @@ class ProBloc extends Bloc<ProEvent, ProState> {
   }
 
   Future<PurchasedItem> _findProPurchase() async {
+    // todo compare firebase & availablePurchases
     var purchases;
     var subscriptions;
     try {
       purchases = await FlutterInappPurchase.instance.getAvailablePurchases();
-//      FlutterInappPurchase.
     } catch (e) {
       print(e);
     }
@@ -82,7 +85,7 @@ class ProBloc extends Bloc<ProEvent, ProState> {
 
     try {
       item = purchases.lastWhere(
-          (p) => p.productId == 'monthly' ||p.productId == 'yearly' ,
+          (p) => p.productId == 'monthly' || p.productId == 'yearly',
           orElse: null);
     } on StateError catch (e) {
       print(e);
@@ -182,11 +185,9 @@ class ProBloc extends Bloc<ProEvent, ProState> {
     print(change);
   }
 
-
   void purchaseProMonthly() => add(ProPurchaseRequested('monthly'));
 
   void purchaseProYearly() => add(ProPurchaseRequested('yearly'));
-
 }
 
 // ---------------

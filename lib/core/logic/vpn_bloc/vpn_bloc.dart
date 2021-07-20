@@ -33,11 +33,15 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
     proBloc = new ProBloc();
 
     inAppBloc.init();
-    inAppBloc.stream.listen((event) {
-      if (event is InAppStateLoading) {
-        print('doing nothing');
+    inAppBloc.stream.listen((state) {
+      if (state is InAppStateLoading) {
+        print('InApp initialized. Connecting...');
       }
-      if (event is InAppStateReady) {
+
+      // start loading product info when in-app lib ready
+      if (state is InAppStateReady) {
+        print('InApp connected and ready.');
+        print('Fetching products info');
         proBloc.init();
       }
     });
