@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
+import 'package:open_belvpn/screens/subscription/bloc/subscription_bloc.dart';
+
+import 'components/subscription_buttons.dart';
 
 class Subscription extends StatefulWidget {
   Subscription({
@@ -20,40 +22,35 @@ class Subscription extends StatefulWidget {
 }
 
 class _SubscriptionState extends State<Subscription> {
-  bool monthly = true;
+  static final bottomButtonTextStyle = GoogleFonts.lato(
+      fontSize: 11, fontWeight: FontWeight.w400, color: Color(0x80101010));
 
-  void setMonthly() {
-    monthly = true;
-  }
-
-  void setYearly() {
-    monthly = false;
-  }
+  static final bottomButtonTextStylePressed = GoogleFonts.lato(
+      fontSize: 11, fontWeight: FontWeight.w400, color: Color(0x101010));
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // theme: ThemeData.light(),
-      home: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.black,
-            ),
-            onPressed: () => Navigator.pop(context),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.black,
           ),
-          title: Text(' VPN Security',
-              style: GoogleFonts.lato(
-                  color: Colors.black,
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold)),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: LayoutBuilder(
+        title: Text(' VPN Security',
+            style: GoogleFonts.lato(
+                color: Colors.black,
+                fontSize: 19,
+                fontWeight: FontWeight.bold)),
+      ),
+      body: SafeArea(
+        child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -91,124 +88,37 @@ class _SubscriptionState extends State<Subscription> {
                       ],
                     ),
                     // TODO buttons
-                    StreamBuilder<ProState>(
-                        stream:
-                            BlocProvider.of<VpnBloc>(context).proBloc.stream,
-                        builder: (context, snapshot) {
-                          if (snapshot is Ready) {
-                            return Text('pro already');
+                    BlocListener(
+                        bloc:
+                            BlocProvider.of<VpnBloc>(context).subscriptionBloc,
+                        listener: (BuildContext context, state) {
+                          // close this modal
+                          if (state is FinalizePurchase) {
+                            Navigator.of(context).pop();
                           }
 
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 6, bottom: 6),
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    // primary: Color(0xFF007AFF), //0xFF007AFF
-                                    backgroundColor: monthly
-                                        ? Color(0xFFF2F2F7)
-                                        : Color(0xFFE7E7EC),
-                                    //0xFFE7E7EC gray 0xFFF2F2F7 white
-                                    elevation: 4,
-                                    minimumSize: Size(54.0, 54.0),
+                          if (state is PurchaseFailed) {
 
-                                    side: BorderSide(
-                                        color: monthly
-                                            ? Color(0xFF007AFF)
-                                            : Color(0xFFE7E7EC),
-                                        width: 1.5),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      monthly = true;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('Monthly',
-                                          style: GoogleFonts.lato(
-                                              fontSize: 19,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF101010))),
-                                      Text("\$7.99",
-                                          style: GoogleFonts.lato(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFF101010))),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 6, bottom: 6),
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    primary: Color(0xFF007AFF),
-                                    //0xFF007AFF
-                                    backgroundColor: !monthly
-                                        ? Color(0xFFF2F2F7)
-                                        : Color(0xFFE7E7EC),
-                                    //0xFFE7E7EC gray 0xFFF2F2F7 white
-                                    elevation: 4,
-                                    minimumSize: Size(54.0, 54.0),
+                          }
+                        },
+                        child: SubscriptionButtons()),
 
-                                    side: BorderSide(
-                                        color: !monthly
-                                            ? Color(0xFF007AFF)
-                                            : Color(0xFFE7E7EC),
-                                        width: 1.5),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      monthly = false;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('Yearly',
-                                          style: GoogleFonts.lato(
-                                              fontSize: 19,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF101010))),
-                                      Text("\$49.99",
-                                          style: GoogleFonts.lato(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFF101010))),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
                     Text("Plan automatically renews weekly untill cancelled.",
                         style: GoogleFonts.lato(
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
                             color: Color(0x80101010))),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Color(0xFF007AFF),
-                          padding: EdgeInsets.only(top: 16, bottom: 16)),
+                    MaterialButton(
+                      color: Color(0xFF007AFF),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       onPressed: () {
-                        if (monthly) {
-                          // widget.onPurchasedMonthly();
-                          BlocProvider.of<VpnBloc>(context)
-                              .proBloc
-                              .purchaseProMonthly();
+                        BlocProvider.of<VpnBloc>(context, listen: false)
+                            .subscriptionBloc
+                            .purchase();
 
-                        } else {
-                          // widget.onPurchasedYearly();
-                          BlocProvider.of<VpnBloc>(context)
-                              .proBloc
-                              .purchaseProYearly();
-                        }
                         // Navigator.pop(context);
                       },
                       child: Row(
@@ -232,36 +142,28 @@ class _SubscriptionState extends State<Subscription> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF101010)),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              'Privacy Policy',
-                              style: GoogleFonts.lato(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF101010)),
-                            )),
-                        // Divider(height: 22, thickness: 25, color: Colors.red),
+                          onPressed: () {},
+                          child: Text(
+                            'Privacy Policy',
+                            style: bottomButtonTextStyle,
+                          ),
+                        ),
+                        RowDivider(),
                         TextButton(
-                            onPressed: () {},
-                            child: Text('Restore',
-                                style: GoogleFonts.lato(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFF101010)))),
-                        // Divider(color: Colors.black),
+                          onPressed: () {},
+                          child: Text(
+                            'Restore',
+                            style: bottomButtonTextStyle,
+                          ),
+                        ),
+                        RowDivider(),
                         TextButton(
-                            onPressed: () {},
-                            child: Text('Terms of Use',
-                                style: GoogleFonts.lato(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFF101010)))),
+                          onPressed: () {},
+                          child: Text(
+                            'Terms of Use',
+                            style: bottomButtonTextStyle,
+                          ),
+                        ),
                       ],
                     )
                   ],
@@ -270,6 +172,20 @@ class _SubscriptionState extends State<Subscription> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class RowDivider extends StatelessWidget {
+  const RowDivider({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 12,
+      child: VerticalDivider(
+        thickness: 2,
       ),
     );
   }

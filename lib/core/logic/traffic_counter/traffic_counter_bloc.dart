@@ -1,18 +1,39 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:open_belvpn/core/models/vpnStatus.dart';
+import 'package:localstorage/localstorage.dart';
 
-class TrafficCounterBloc extends Cubit<VpnStatus>{
-  TrafficCounterBloc() : super(VpnStatus());
+class TrafficCounterBloc extends Cubit<int> {
+  TrafficCounterBloc() : super(0) {
+    try {
+      updateFromStorage();
+    } catch (e) {
+      print(e);
+    }
+  }
 
-  // listens to vpn status bloc
-  // sums up the traffic periodically
-  //
+  updateFromStorage()async {
+    final saved = await _get();
+    if(saved!=null) emit(saved);
+  }
 
-@override
-  void onChange(Change<VpnStatus> change) {
-    // TODO: implement onChange
-    super.onChange(change);
-    print(change.nextState.byteOut);
+  _get() async {
+    final storage = LocalStorage('free');
+    await storage.ready;
+    return storage.getItem('traffic') as int;
+  }
 
+  _put(int traffic) async {
+    final storage = LocalStorage('free');
+    await storage.ready;
+    if (traffic != null && traffic > 0) {
+      storage.setItem('traffic', traffic);
+    }
+  }
+
+  updateTraffic(traffic) async {
+    // try saving
+    if (traffic != null && traffic > 0) {
+      _put(traffic);
+    }
+    updateFromStorage();
   }
 }

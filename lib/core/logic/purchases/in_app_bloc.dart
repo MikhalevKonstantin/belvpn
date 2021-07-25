@@ -6,9 +6,7 @@ class InAppBloc extends Bloc<InAppBlocEvent, InAppBlocState> {
 
   InAppBloc() : super(InAppBlocStateInitial());
 
-
   init() => this.add(InitializeInApp());
-  
 
   @override
   Stream<InAppBlocState> mapEventToState(InAppBlocEvent event) async* {
@@ -39,7 +37,6 @@ class InAppBloc extends Bloc<InAppBlocEvent, InAppBlocState> {
   void dispose() async {
     await FlutterInappPurchase.instance.endConnection;
   }
-
 }
 
 // ---------------

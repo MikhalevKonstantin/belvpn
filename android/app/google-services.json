@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "330073279180",
-    "project_id": "ovpn-319209",
-    "storage_bucket": "ovpn-319209.appspot.com"
+    "project_number": "577643362000",
+    "project_id": "ovpn-81457",
+    "storage_bucket": "ovpn-81457.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330073279180:android:20734ae87b845f144f1069",
+        "mobilesdk_app_id": "1:577643362000:android:11619723f805320248d0d5",
         "android_client_info": {
           "package_name": "by.open_belvpn"
         }
       },
       "oauth_client": [
         {
-          "client_id": "330073279180-agonerqe0n5tb5g8qi72p1rgp72uh787.apps.googleusercontent.com",
+          "client_id": "577643362000-1i3srj8v79nfo80qtulsod5hbte2tvrt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDRX_PbrWOQNeQR7SdPMPNe79hN2E_OaBQ"
+          "current_key": "AIzaSyD18t6QRKGOdb8hlXi6jQygHOe8ROm-Q-4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "330073279180-agonerqe0n5tb5g8qi72p1rgp72uh787.apps.googleusercontent.com",
+              "client_id": "577643362000-1i3srj8v79nfo80qtulsod5hbte2tvrt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
+import android.util.Log;
 
 import de.blinkt.openvpn.VpnProfile;
 

@@ -5,12 +5,14 @@ class OutlineTextButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final double width;
+  final Widget icon;
 
   const OutlineTextButton({
     Key key,
     this.onPressed,
     this.text,
     this.width,
+    this.icon,
   }) : super(key: key);
 
   static final buttonTextStyle = GoogleFonts.lato(
@@ -39,9 +41,19 @@ class OutlineTextButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: outlineButtonStyle,
-        child: Text(
-          text,
-          style: buttonTextStyle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if(icon!=null) Padding(
+              padding: const EdgeInsets.symmetric(horizontal:0.0),
+              child: icon,
+            ),
+            Text(
+              text,
+              style: buttonTextStyle,
+
+            ),
+          ],
         ),
       ),
     );

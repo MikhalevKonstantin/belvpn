@@ -201,8 +201,6 @@ public class OpenVPNThread implements Runnable {
             VpnStatus.logException("Error reading from output of OpenVPN process", e);
             stopProcess();
         }
-
-
     }
 
     private String genLibraryPath(String[] argv, ProcessBuilder pb) {

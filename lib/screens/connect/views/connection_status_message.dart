@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:open_belvpn/core/logic/connection_bloc/connection_bloc.dart';
+import 'package:open_belvpn/core/logic/vpn_connection_bloc/connection_bloc.dart';
 import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 
@@ -53,7 +53,7 @@ class ConnectionStatusMessagePro extends StatelessWidget {
             message = 'TAP TO CONNECT';
           }
 
-          if (state is Connecting) {
+          if (state is Connecting || state is Reconnecting) {
             message = 'CONNECTING';
           }
 
@@ -97,11 +97,12 @@ class ConnectionStatusMessageFree extends StatelessWidget {
         builder: (context, ConnectionState state) {
           String message = '';
 
-          if (state is Connecting) {
+          if (state is Connecting|| state is Reconnecting) {
             message = 'CONNECTING';
           }
 
           return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 message,

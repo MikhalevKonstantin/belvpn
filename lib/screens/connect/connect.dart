@@ -11,6 +11,7 @@ import 'package:open_belvpn/screens/connect/views/connection_status_message.dart
 import 'package:open_belvpn/screens/connect/views/server_picker_button.dart';
 import 'package:open_belvpn/screens/connect/views/server_picker_modal.dart';
 import 'package:open_belvpn/screens/connect/views/title.dart';
+import 'package:open_belvpn/screens/subscription/subscription.dart';
 // import 'package:loading_gifs/loading_gifs.dart';
 
 const String vpnConnected = NizVpn.vpnConnected;
@@ -59,8 +60,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      // appBar: buildAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -100,6 +99,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
     final vpnBloc = BlocProvider.of<VpnBloc>(ctx);
     final serversBloc = vpnBloc.remoteServersBloc;
     showGeneralDialog(
+
       context: ctx,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -111,7 +111,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
           child: Container(
             width: MediaQuery.of(ctx).size.width,
             height: MediaQuery.of(ctx).size.height,
-            padding: EdgeInsets.all(20),
+            // padding: EdgeInsets.all(20),
             color: Colors.white,
             child: BlocBuilder(
               bloc: serversBloc,
@@ -128,8 +128,15 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           final proState = BlocProvider.of<VpnBloc>(ctx, listen: false).proBloc.state;
                           if(proState is Ready && proState.isPro){
                             vpnBloc.selectedServerBloc.select(serverInfo);
+                            Navigator.pop(context);
                           } else {
 
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => Subscription(),
+                              ),
+                            );
                             // show dialog
                           }
 

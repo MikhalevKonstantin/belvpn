@@ -19,12 +19,18 @@ dependencies:
   bloc:
   flutter_bloc: ^7.0.1
   rxdart:
-  firebase_core:
+  firebase_core: "^1.4.0"
   cloud_firestore:
   firebase_storage:
   flutter_inapp_purchase:
   localstorage:
   firebase_remote_config: "^0.10.0+3"
+  cached_network_image:
+  intl:
+  duration:
+  country_codes: ^2.0.1
+  device_info_plus:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:
