@@ -8,6 +8,7 @@ import 'package:open_belvpn/core/logic/purchases/remote_products_config.dart';
 import 'package:open_belvpn/core/logic/remote_servers_list_bloc/remote_servers_bloc.dart';
 import 'package:open_belvpn/core/logic/remote_servers_list_bloc/selected_server_bloc.dart';
 import 'package:open_belvpn/core/logic/traffic_counter/traffic_counter_bloc.dart';
+import 'package:open_belvpn/core/logic/traffic_limit/traffic_limit_cubit.dart';
 import 'package:open_belvpn/core/logic/vpn_connection_bloc/connection_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_stages_bloc/cubit.dart';
 import 'package:open_belvpn/core/logic/vpn_status_bloc/vpn_status_bloc.dart';
@@ -127,42 +128,28 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
 
     // pipes new stages and statuses as events to connectButtonBloc and others
     vpnStatusBloc.stream.listen((status) {
-
       // connectionBloc.updateStatus(status);
       final libDuration = status.duration.parseDuration();
       if (libDuration != null) {
         vpnTimeBloc.onStatusUpdate(libDuration);
       }
 
-      if (proBloc.state is Ready && (proBloc.state as Ready).isPro == false) {
-
+      if (isPro == false) {
         final total = status.totalIn + status.totalOut;
         trafficCounterBloc.updateTraffic(total);
       }
     });
 
-
     vpnStagesBloc.stream.listen((stage) {
       connectionBloc.updateStage(stage);
-      print(stage);
-
-      // on disconnect ->
-      // if (stage == NizVpn.vpnDisconnected) {
-
-      // if (total >= 0) {
-      //   trafficCounterBloc.state.
-      // }
-      // }
     });
-
     NizVpn.refreshStage();
 
     // IP should be refreshed only in pro
     connectionBloc.stream.listen((state) async {
       // todo handle pro purchase case somehow
-
-      final proState = proBloc.state;
-      if (proState is Ready && proState.isPro) {
+      // ip refresh logic
+      if (isPro) {
         if (state is Disconnected) {
           ipAddressBloc.refresh();
         }
@@ -171,22 +158,17 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
         }
       }
 
-
       // Timer logic
       if (state is Connected) {
         vpnTimeBloc.onConnected();
-      }
-      else {
+      } else {
         vpnTimeBloc.stop();
       }
 
-
       if (state is Reconnecting) {
-        print('fire reconnect logic');
         try {
           // await _stagesSubscription.cancel();
           _connect();
-
           // todo test extensively & probably remove
           await for (var xz in vpnStagesBloc.stream) {
             if (xz == NizVpn.vpnDisconnected) {
@@ -198,6 +180,7 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
         } catch (e) {
           print(e);
         }
+
         // stopvpn future can't be awaited for some reason
         // await Future.delayed(Duration(milliseconds: 2000));
         print(
@@ -208,20 +191,36 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
 
     // Change location should work only when Pro subscription active
     selectedServerBloc.stream.listen((event) {
-      final proState = proBloc.state;
-
-      if (proState is Ready && proState.isPro) {
+      if (isPro) {
         _reconnect();
       }
     });
 
-    proBloc.stream.listen((state) {
-      //refresh
-      if (state is ProUpdate && (state as ProLoaded).isPro) {
-        ipAddressBloc.refresh();
-      }
+    proBloc.stream.listen(
+      (state) {
+        //refresh
+        if (isPro) {
+          ipAddressBloc.refresh();
+        }
+      },
+    );
+
+    trafficLimit = TrafficLimitCubit();
+
+    trafficCounterBloc.stream.listen((event) {
+      trafficLimit.onTraffic(event, isPro);
     });
+
+    trafficLimit.stream.listen(
+      (limitReached) {
+        if (limitReached) {
+          disconnect();
+        }
+      },
+    );
   }
+
+  TrafficLimitCubit trafficLimit;
 
   // gets current selected config (to start VPN)
   get currentVpnConfig => VpnConfig(
@@ -246,8 +245,6 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
   }
 
   _reconnect() async {
-    // await _statusSubscription.cancel();
-    // await _stagesSubscription.cancel();
     connectionBloc.switchServer();
   }
 
@@ -257,16 +254,22 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       print('disconnecting');
       NizVpn.stopVpn();
     } else {
-      // connect
-      print('connecting to ' + (currentVpnConfig as VpnConfig).name);
-      connectionBloc.onConnectionRequested();
+      // do not connect if traffic limit reached
 
-      NizVpn.startVpn(
-        currentVpnConfig,
-        dns: DnsConfig("23.253.163.53", "198.101.242.72"),
-      );
+      if (!trafficLimit.state || isPro) {
+        print('connecting to ' + (currentVpnConfig as VpnConfig).name);
+        connectionBloc.onConnectionRequested();
+        NizVpn.startVpn(
+          currentVpnConfig,
+          dns: DnsConfig("23.253.163.53", "198.101.242.72"),
+        );
+      } else {
+        connectionBloc.limitReached();
+      }
     }
   }
+
+  bool get isPro => (proBloc.state is Ready) && (proBloc.state as Ready).isPro;
 
   @override
   Stream<VpnBlocState> mapEventToState(VpnBlocEvent event) async* {

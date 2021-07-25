@@ -153,8 +153,8 @@ class ConnectionDetailsFree extends StatelessWidget {
               LinearPercentIndicator(
                 width: MediaQuery.of(context).size.width - 64,
                 lineHeight: 14.0,
-                percent: percent ?? 0.4,
-                progressColor: Colors.blue,
+                percent: percent.clamp(0.0,1.0),
+                progressColor: percent!=null &&  percent>1.0? Colors.red:Colors.blue,
               ),
               SizedBox(
                 height: 8,

@@ -59,8 +59,8 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {
     //     connect() : disconnect();
     // }
     //
-    if(event is DisconnectRequested){
 
+    if(event is DisconnectRequested){
       yield Disconnected();
       NizVpn.stopVpn();
     }
@@ -146,10 +146,15 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {
 
   void disconnect()=> add(DisconnectRequested());
 
+  void limitReached() => add(LimitReached());
 
 
 
 
+
+}
+
+class LimitReached extends ConnectionEvent {
 }
 
 class Toggle extends ConnectionEvent {

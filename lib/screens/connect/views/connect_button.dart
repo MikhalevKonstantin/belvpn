@@ -17,10 +17,16 @@ class ConnectButton extends StatelessWidget {
         Widget icon;
 
         if (state is Disconnected) {
-          icon = _SvgIcon(
-            'power.svg',
-            key: ValueKey('disconnected'),
-          );
+          icon = BlocBuilder(
+              key: ValueKey('disconnected'),
+              bloc: BlocProvider.of<VpnBloc>(context).trafficLimit,
+              builder: (BuildContext context, bool state) {
+                return _SvgIcon(
+                  'power.svg',
+                  // key:
+                  color: state ? Colors.black12 : Colors.white,
+                );
+              });
         }
 
         if (state is Connecting || state is Reconnecting) {
@@ -38,38 +44,41 @@ class ConnectButton extends StatelessWidget {
           // text = state.duration;
         }
 
-        return RoundShadowButton(
-          willDisconnect: state is! Disconnected,
-          onPressed: () {
-            if (state is! Disconnected)
-              BlocProvider.of<VpnBloc>(context, listen: false)
-                  .connectionBloc
-                  .disconnect();
-            else
-              BlocProvider.of<VpnBloc>(context, listen: false).connect();
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // icon
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 420),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                  child: icon,
-                ),
+        return BlocBuilder(
+          bloc: BlocProvider.of<VpnBloc>(context).trafficLimit,
+          builder: (context, bool overLimit) {
+            return RoundShadowButton(
+              willDisconnect: state is! Disconnected,
+              onPressed: () {
+                if (state is! Disconnected)
+                  BlocProvider.of<VpnBloc>(context, listen: false)
+                      .connectionBloc
+                      .disconnect();
+                else if (!overLimit)
+                  BlocProvider.of<VpnBloc>(context, listen: false).connect();
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 420),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      child: icon, // power_on/progress/stop:
+                    ),
+                  ),
+                  // Timer hh:mm:ss
+                  if (state is Connected) ConnectionTimer(),
+                ],
               ),
-              // status text
-              if (state is Connected) ConnectionTimer(),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -77,14 +86,15 @@ class ConnectButton extends StatelessWidget {
 }
 
 class _SvgIcon extends StatelessWidget {
-  const _SvgIcon(this.iconName, {Key key}) : super(key: key);
+  const _SvgIcon(this.iconName, {Key key, this.color}) : super(key: key);
   final String iconName;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
       'assets/svg_icons/$iconName',
-      color: Colors.white,
+      color: color ?? Colors.white,
       height: MediaQuery.of(context).size.width / 10,
     );
   }
