@@ -32,7 +32,7 @@ class SubscriptionButtons extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final item = state.products[index];
                   return Padding(
-                    padding: EdgeInsets.only(top: 6, bottom: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: ProductButton(
                       selected: state.selectedIndex == index,
                       title: item.title,

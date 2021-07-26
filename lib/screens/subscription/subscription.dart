@@ -23,7 +23,7 @@ class Subscription extends StatefulWidget {
 
 class _SubscriptionState extends State<Subscription> {
   static final bottomButtonTextStyle = GoogleFonts.lato(
-      fontSize: 11, fontWeight: FontWeight.w400, color: Color(0x80101010));
+      fontSize: 10, fontWeight: FontWeight.w400, color: Color(0x80101010));
 
   static final bottomButtonTextStylePressed = GoogleFonts.lato(
       fontSize: 11, fontWeight: FontWeight.w400, color: Color(0x101010));
@@ -31,38 +31,34 @@ class _SubscriptionState extends State<Subscription> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: Colors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(' VPN Security',
-            style: GoogleFonts.lato(
-                color: Colors.black,
-                fontSize: 19,
-                fontWeight: FontWeight.bold)),
-      ),
+      backgroundColor: Color(0xffF2F2F7),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
+            return Stack(fit: StackFit.expand, children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Navigator.pop(context),
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/subscription.png'),
+                    Expanded(
+                      child: Center(
+                        child: Image.asset('assets/images/subscription.png'),
+                      ),
+                    ),
+
                     Column(
                       children: [
                         Text("Start Your",
@@ -77,6 +73,7 @@ class _SubscriptionState extends State<Subscription> {
                                 color: Color(0xFF007AFF))),
                       ],
                     ),
+                    SizedBox(height: 8),
                     Column(
                       children: [
                         Text('Faster VPN servers, more virtual locations, ',
@@ -88,26 +85,36 @@ class _SubscriptionState extends State<Subscription> {
                       ],
                     ),
                     // TODO buttons
-                    BlocListener(
-                        bloc:
-                            BlocProvider.of<VpnBloc>(context).subscriptionBloc,
-                        listener: (BuildContext context, state) {
-                          // close this modal
-                          if (state is FinalizePurchase) {
-                            Navigator.of(context).pop();
-                          }
+                    SizedBox(height: 16),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BlocListener(
+                          bloc: BlocProvider.of<VpnBloc>(context)
+                              .subscriptionBloc,
+                          listener: (BuildContext context, state) {
+                            // close this modal
+                            if (state is FinalizePurchase) {
+                              Navigator.of(context).pop();
+                            }
 
-                          if (state is PurchaseFailed) {
+                            if (state is PurchaseFailed) {}
+                          },
+                          child: SubscriptionButtons(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              "Plan automatically renews weekly untill cancelled.",
+                              style: GoogleFonts.lato(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0x80101010))),
+                        ),
+                      ],
+                    ),
+                    // SizedBox(height:8),
 
-                          }
-                        },
-                        child: SubscriptionButtons()),
-
-                    Text("Plan automatically renews weekly untill cancelled.",
-                        style: GoogleFonts.lato(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0x80101010))),
                     MaterialButton(
                       color: Color(0xFF007AFF),
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -138,38 +145,45 @@ class _SubscriptionState extends State<Subscription> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Privacy Policy',
-                            style: bottomButtonTextStyle,
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            // style:  ButtonStyle(padding: EdgeInsets.vertical),
+                            child: Text(
+                              'Privacy Policy',
+                              style: bottomButtonTextStyle,
+                            ),
                           ),
-                        ),
-                        RowDivider(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Restore',
-                            style: bottomButtonTextStyle,
+                          RowDivider(),
+                          InkWell(
+                            onTap: () {},
+                            child: Text(
+                              'Restore',
+                              style: bottomButtonTextStyle,
+                            ),
                           ),
-                        ),
-                        RowDivider(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Terms of Use',
-                            style: bottomButtonTextStyle,
+                          RowDivider(),
+                          InkWell(
+                            onTap: () {},
+                            child: Text(
+                              'Terms of Use',
+                              style: bottomButtonTextStyle,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
-            );
+            ]);
           },
         ),
       ),

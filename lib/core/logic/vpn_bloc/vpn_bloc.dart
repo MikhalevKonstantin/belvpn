@@ -37,6 +37,7 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
   SubscriptionBloc subscriptionBloc;
 
   TrafficCounterBloc trafficCounterBloc;
+  TrafficLimitCubit trafficLimit;
 
   VpnStatusBLoc vpnStatusBloc;
   VpnStagesBloc vpnStagesBloc;
@@ -87,14 +88,11 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       }
     });
 
-    // productsBloc.stream.listen((skus) {
-    //   subscriptionBloc.updateProducts(skus.values.toList());
-    // });
 
     // fetches products SKUs from "Firebase Remote Config"
     productsBloc.init();
 
-    // establishes the connection to IAPService is
+    // establishes the connection to IAPService
     inAppBloc.init();
 
     trafficCounterBloc = TrafficCounterBloc();
@@ -102,7 +100,7 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
     vpnStatusBloc = VpnStatusBLoc();
     // emits stages from NizVpn
     vpnStagesBloc = VpnStagesBloc();
-    // timer
+    // timer logic
     vpnTimeBloc = VpnTimeBloc();
 
     // holds the state of currently selected server (modal/change location btn)
@@ -115,7 +113,7 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       (RemoteServersState state) {
         if (state is RemoteServersLoaded) {
           // todo last saved from prefs?
-          // selectedServerBloc.emit(state.servers.first);
+          selectedServerBloc.emit(state.servers.first);
         }
       },
     );
@@ -126,7 +124,7 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
     // should refresh when pro && connection status changes to connected;
     ipAddressBloc = IpAddressBloc();
 
-    // pipes new stages and statuses as events to connectButtonBloc and others
+    // pipes new stages and statuses as events to timer and traffic blocs
     vpnStatusBloc.stream.listen((status) {
       // connectionBloc.updateStatus(status);
       final libDuration = status.duration.parseDuration();
@@ -140,9 +138,8 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       }
     });
 
-    vpnStagesBloc.stream.listen((stage) {
-      connectionBloc.updateStage(stage);
-    });
+    // pipe vpn connection state
+    vpnStagesBloc.stream.listen(connectionBloc.updateStage);
     NizVpn.refreshStage();
 
     // IP should be refreshed only in pro
@@ -166,25 +163,21 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       }
 
       if (state is Reconnecting) {
+
         try {
-          // await _stagesSubscription.cancel();
+          // disconnect ->
           _connect();
-          // todo test extensively & probably remove
-          await for (var xz in vpnStagesBloc.stream) {
-            if (xz == NizVpn.vpnDisconnected) {
+          // wait for disconnected stage
+          await for (var stage in vpnStagesBloc.stream) {
+            if (stage == NizVpn.vpnDisconnected) {
               print('disconnected');
               break;
             }
-            // break;
           }
         } catch (e) {
           print(e);
         }
-
-        // stopvpn future can't be awaited for some reason
-        // await Future.delayed(Duration(milliseconds: 2000));
-        print(
-            '1 second passed, initating connection to ${selectedServerBloc.state.country}');
+        // -> connect to new server
         _connect();
       }
     });
@@ -196,10 +189,11 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       }
     });
 
+
     proBloc.stream.listen(
       (state) {
-        //refresh
         if (isPro) {
+          // refresh ip
           ipAddressBloc.refresh();
         }
       },
@@ -219,8 +213,6 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
       },
     );
   }
-
-  TrafficLimitCubit trafficLimit;
 
   // gets current selected config (to start VPN)
   get currentVpnConfig => VpnConfig(
@@ -273,13 +265,6 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
 
   @override
   Stream<VpnBlocState> mapEventToState(VpnBlocEvent event) async* {
-    // if(event is RotateServerEvent){
-    //   print('rotate');
-    //  await _rotateServer();
-    //  yield state;
-    // }
-    //
-    // yield state;
   }
 
   _disconnect() {
@@ -287,14 +272,6 @@ class VpnBloc extends Bloc<VpnBlocEvent, VpnBlocState> {
     //_connect();
   }
 
-//
-// @override
-// Stream<VpnBlocEvent> transform(Stream<VpnBlocEvent> events) {
-//   return (events as Observable<VpnBlocEvent>)
-//       // .throttle(Duration(milliseconds: 40)
-//       // .debounce... etc
-//       ;
-// }
 }
 
 // ---------------
