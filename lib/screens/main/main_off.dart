@@ -15,6 +15,62 @@ class MainOff extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainOff> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<VpnBloc>(
+      create: (_) => VpnBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: BottomNavigationApp(),
+      ),
+    );
+  }
+}
+
+class BottomNavigationApp extends StatefulWidget {
+  const BottomNavigationApp({Key key}) : super(key: key);
+
+  @override
+  _BottomNavigationAppState createState() => _BottomNavigationAppState();
+}
+
+class _BottomNavigationAppState extends State<BottomNavigationApp> {
+  @override
+  Widget build(BuildContext context) {
+    return SplashGate(
+      child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          // backgroundColor: Colors.black,
+          unselectedItemColor: Color(0x66101010),
+          selectedItemColor: Color(0xFF101010),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: [
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg_icons/home.svg',
+                  color: _selectedIndex == 0
+                      ? Color(0xFF101010)
+                      : Color(0x66101010),
+                ),
+                label: '1'),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg_icons/setting.svg',
+                  color: _selectedIndex == 1
+                      ? Color(0xFF101010)
+                      : Color(0x66101010),
+                ),
+                label: '2'),
+          ],
+        ),
+        body: _widgetOptions[_selectedIndex],
+      ),
+    );
+  }
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -23,68 +79,26 @@ class _MainScreenState extends State<MainOff> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<VpnBloc>(
-      create: (_) => VpnBloc(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-            // backgroundColor: Colors.black,
-            unselectedItemColor: Color(0x66101010),
-            selectedItemColor: Color(0xFF101010),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            items: [
-              BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/svg_icons/home.svg',
-                    color: _selectedIndex == 0
-                        ? Color(0xFF101010)
-                        : Color(0x66101010),
-                  ),
-                  label: '1'),
-              BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/svg_icons/setting.svg',
-                    color: _selectedIndex == 1
-                        ? Color(0xFF101010)
-                        : Color(0x66101010),
-                  ),
-                  label: '2'),
-            ],
-          ),
-          body: AppBody(
-            pageIndex: _selectedIndex,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AppBody extends StatelessWidget {
   static List<Widget> _widgetOptions = <Widget>[
     ConnectScreen(),
     SettingsScreen(),
   ];
+}
 
-  const AppBody({
+class SplashGate extends StatelessWidget {
+  const SplashGate({
     Key key,
-    this.pageIndex,
+    this.child,
   }) : super(key: key);
-  final int pageIndex;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).proBloc,
       builder: (BuildContext context, ProState state) {
-        if (state is Ready && state.isPro) {
-          return _widgetOptions[pageIndex];
+        if (state is Ready) {
+          return child;
         } else {
           return Splash();
         }
