@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
+import 'package:open_belvpn/core/logic/remote_servers_list_bloc/remote_servers_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
@@ -85,6 +86,25 @@ class _BottomNavigationAppState extends State<BottomNavigationApp> {
   ];
 }
 
+class ServerListGate extends StatelessWidget {
+  const ServerListGate({
+    Key key,
+    this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: BlocProvider.of<VpnBloc>(context).remoteServersBloc,
+      builder: (context, RemoteServersState state) {
+        return state is RemoteServersLoaded ? child : Splash();
+      },
+    );
+  }
+}
+
 class SplashGate extends StatelessWidget {
   const SplashGate({
     Key key,
@@ -98,7 +118,7 @@ class SplashGate extends StatelessWidget {
       bloc: BlocProvider.of<VpnBloc>(context).proBloc,
       builder: (BuildContext context, ProState state) {
         if (state is Ready) {
-          return child;
+          return ServerListGate(child: child);
         } else {
           return Splash();
         }
