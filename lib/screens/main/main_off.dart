@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
-import 'package:open_belvpn/ui/screens/mainScreen.dart';
+import 'package:open_belvpn/screens/splash/splash.dart';
 
 class MainOff extends StatefulWidget {
   // const MainScreen({Key? key}) : super(key: key);
@@ -17,11 +17,6 @@ class MainOff extends StatefulWidget {
 class _MainScreenState extends State<MainOff> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    ConnectScreen(),
-    SettingsScreen(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -31,7 +26,6 @@ class _MainScreenState extends State<MainOff> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<VpnBloc>(
-
       create: (_) => VpnBloc(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -63,9 +57,38 @@ class _MainScreenState extends State<MainOff> {
                   label: '2'),
             ],
           ),
-          body: _widgetOptions.elementAt(_selectedIndex),
+          body: AppBody(
+            pageIndex: _selectedIndex,
+          ),
         ),
       ),
+    );
+  }
+}
+
+class AppBody extends StatelessWidget {
+  static List<Widget> _widgetOptions = <Widget>[
+    ConnectScreen(),
+    SettingsScreen(),
+  ];
+
+  const AppBody({
+    Key key,
+    this.pageIndex,
+  }) : super(key: key);
+  final int pageIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: BlocProvider.of<VpnBloc>(context).proBloc,
+      builder: (BuildContext context, ProState state) {
+        if (state is Ready && state.isPro) {
+          return _widgetOptions[pageIndex];
+        } else {
+          return Splash();
+        }
+      },
     );
   }
 }
