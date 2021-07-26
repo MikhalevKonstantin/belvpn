@@ -21,7 +21,7 @@ class VpnTimeBloc extends Bloc<VpnTimeEvent, VpnTimeState> {
         // find diff
         // NizVpn 'connected event' and 'status.duration' have 0-4 seconds diff
         final diff = time - (state as VpnTimerRunning).time;
-        if (diff.abs().inSeconds > 5) {
+        if (diff.abs().inSeconds > 60) {
           print('syncing time');
           launchTimer(time);
         }

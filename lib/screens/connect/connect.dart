@@ -98,8 +98,8 @@ class _ConnectScreenState extends State<ConnectScreen> {
   showServersPicker(ctx) {
     final vpnBloc = BlocProvider.of<VpnBloc>(ctx);
     final serversBloc = vpnBloc.remoteServersBloc;
-    showGeneralDialog(
 
+    showGeneralDialog(
       context: ctx,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -125,12 +125,14 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         selected: st,
                         onChanged: (serverInfo) {
                           // todo: show purchase dialog if not pro
-                          final proState = BlocProvider.of<VpnBloc>(ctx, listen: false).proBloc.state;
-                          if(proState is Ready && proState.isPro){
+                          final proState =
+                              BlocProvider.of<VpnBloc>(ctx, listen: false)
+                                  .proBloc
+                                  .state;
+                          if (proState is Ready && proState.isPro) {
                             vpnBloc.selectedServerBloc.select(serverInfo);
                             Navigator.pop(context);
                           } else {
-
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -139,7 +141,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
                             );
                             // show dialog
                           }
-
                         },
                       );
                     },
@@ -154,6 +155,4 @@ class _ConnectScreenState extends State<ConnectScreen> {
       },
     );
   }
-
-
 }
