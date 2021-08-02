@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _urlTerms = 'https://google.com';
   final _urlAbout = 'https://yandex.ru';
   final _mail =
-      'mailto:mikhalevk@gmail.com?subject=Topic&body=<Type your message here>';
+      'mailto:vpnocean2021@gmail.com?subject=Topic&body=<Type your message here>';
 
   void _launchURL(url) async => await canLaunch(url) ? await launch(url) : null;
 
@@ -153,7 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('VPN Security',
+                            Text('VPN Vital Security',
                                 style: GoogleFonts.lato(
                                     color: Color(0xFF101010),
                                     fontSize: 17,

@@ -18,7 +18,7 @@ class ConnectScreenTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'VPN Security',
+          'VPN Vital Security',
           style: titleStyle,
         ),
         BlocBuilder(

@@ -31,7 +31,7 @@ class Splash extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 8),
-                    child: Text(' \VPN Security',
+                    child: Text(' \VPN Vital Security',
                         style: GoogleFonts.lato(
                             fontSize: 19, fontWeight: FontWeight.bold)),
                   ),

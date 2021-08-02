@@ -48,7 +48,7 @@ class ConnectionStatusMessagePro extends StatelessWidget {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, ConnectionState state) {
-          var message, icon=false;
+          var message, icon = false;
           if (state is Disconnected) {
             message = 'TAP TO CONNECT';
           }
@@ -74,7 +74,9 @@ class ConnectionStatusMessagePro extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
               Text(
                 message,
               ),
@@ -95,12 +97,20 @@ class ConnectionStatusMessageFree extends StatelessWidget {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, ConnectionState state) {
-          String message = '';
+          var message = '', icon = false;
 
-          if (state is Connecting|| state is Reconnecting) {
+          if (state is Disconnected) {
+            message = 'TAP TO CONNECT';
+          }
+
+          if (state is Connecting || state is Reconnecting) {
             message = 'CONNECTING';
           }
 
+          if (state is Connected) {
+            message = 'CONNECTED';
+            icon = true;
+          }
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
