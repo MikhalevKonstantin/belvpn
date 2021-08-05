@@ -18,25 +18,15 @@ class ProductsBloc extends Cubit<Map<String, String>> {
   final RemoteConfig remoteConfig;
 
   init() async {
-    remoteConfig.addListener(fetch);
     _updateState();
+    remoteConfig.addListener(_updateState);
+    remoteConfig.fetchAndActivate();
   }
 
   @override
   Future<Function> close() {
-    remoteConfig.removeListener(fetch);
+    remoteConfig.removeListener(_updateState);
     return super.close();
-  }
-
-  fetch() async {
-    bool updated = await remoteConfig.fetchAndActivate();
-
-    if (updated) {
-      _updateState();
-      // the config has been updated, new parameter values are available.
-    } else {
-      // the config values were previously updated.
-    }
   }
 
   _updateState() {
