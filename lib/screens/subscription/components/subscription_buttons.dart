@@ -12,7 +12,7 @@ extension IndexedIterable<E> on Iterable<E> {
 }
 
 class SubscriptionButtons extends StatelessWidget {
-  const  SubscriptionButtons({Key key}) : super(key: key);
+  const SubscriptionButtons({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,11 @@ class SubscriptionButtons extends StatelessWidget {
         builder: (context, SubscriptionBlocState state) {
           if (state is SubscriptionBlocStateInitial) {
             return Text('pro already');
-          } else if (state is SubscriptionBlocStateReady) {
-
+          } else if (state is SubscriptionBlocStateReady ||
+              state is SubscriptionPurchaseProgressState) {
             // print(state.products[0].)
+
+            final purchasing = state is SubscriptionPurchaseProgressState;
 
             return ListView.builder(
                 shrinkWrap: true,
@@ -37,11 +39,14 @@ class SubscriptionButtons extends StatelessWidget {
                       selected: state.selectedIndex == index,
                       title: item.title,
                       price: '${item.price}',
-                      onPressed: () {
-                        BlocProvider.of<VpnBloc>(context, listen: false)
-                            .subscriptionBloc
-                            .select(item.productId);
-                      },
+                      onPressed: purchasing
+                          ? null
+                          : () {
+                              context
+                                  .read<VpnBloc>()
+                                  .subscriptionBloc
+                                  .select(item.productId);
+                            },
                     ),
                   );
                 });
