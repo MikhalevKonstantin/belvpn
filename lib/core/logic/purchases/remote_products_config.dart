@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductsBloc extends Cubit<Map<String, String>> {
   static final defaults = <String, String>{
-    'premium_button_1': 'monthly',
-    'premium_button_2': 'yearly',
+    // 'premium_button_1': 'monthly',
+    // 'premium_button_2': 'yearly',
   };
 
   ProductsBloc()
@@ -18,8 +18,19 @@ class ProductsBloc extends Cubit<Map<String, String>> {
   final RemoteConfig remoteConfig;
 
   init() async {
+    remoteConfig.addListener(fetch);
     _updateState();
+  }
+
+  @override
+  Future<Function> close() {
+    remoteConfig.removeListener(fetch);
+    return super.close();
+  }
+
+  fetch() async {
     bool updated = await remoteConfig.fetchAndActivate();
+
     if (updated) {
       _updateState();
       // the config has been updated, new parameter values are available.
@@ -29,11 +40,13 @@ class ProductsBloc extends Cubit<Map<String, String>> {
   }
 
   _updateState() {
-    emit(
-      {
-        'premium_button_1': remoteConfig.getString('premium_button_1'),
-        'premium_button_2': remoteConfig.getString('premium_button_2'),
-      },
-    );
+    // decode current config
+    final config = remoteConfig.getAll().map(
+          (key, value) => MapEntry(
+            key,
+            value.asString(),
+          ),
+        );
+    emit(config);
   }
 }

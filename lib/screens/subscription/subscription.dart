@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/subscription/bloc/subscription_bloc.dart';
@@ -55,8 +56,10 @@ class _SubscriptionState extends State<Subscription> {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Image.asset('assets/images/subscription.png'),
-                      ),
+                          child: SvgPicture.asset(
+                              'assets/svg_icons/Illustration.svg')
+                          // Image.asset('assets/images/subscription.png'),
+                          ),
                     ),
 
                     Column(

@@ -97,9 +97,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  final _urlPrivacy = 'https://amazon.com';
-  final _urlTerms = 'https://google.com';
-  final _urlAbout = 'https://yandex.ru';
+  final _urlPrivacy = 'https://vpn-vital-security.com/policy.html';
+  final _urlTerms = 'https://vpn-vital-security.com/terms.html';
+  final _urlAbout = 'https://vpn-vital-security.com';
   final _mail =
       'mailto:vpnocean2021@gmail.com?subject=Topic&body=<Type your message here>';
 
@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildTitle(),
               buildPremiumPlate(),
@@ -256,7 +256,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   buildTitle() {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: Text('Settings',
           style: GoogleFonts.lato(
               color: Colors.black, fontSize: 19, fontWeight: FontWeight.bold)),

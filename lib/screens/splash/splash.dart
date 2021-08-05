@@ -18,6 +18,12 @@ class Splash extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Text(' \VPN Vital Security',
+                        style: GoogleFonts.lato(
+                            fontSize: 19, fontWeight: FontWeight.bold)),
+                  ),
                   Container(
                     height: 23,
                     width: 23,
@@ -26,14 +32,8 @@ class Splash extends StatelessWidget {
                       color: Color(0xFF007AFF),
                     ),
                     child: SvgPicture.asset(
-                      "assets/svg_icons/logo.svg",
+                      "assets/svg_icons/logo2.svg",
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Text(' \VPN Vital Security',
-                        style: GoogleFonts.lato(
-                            fontSize: 19, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

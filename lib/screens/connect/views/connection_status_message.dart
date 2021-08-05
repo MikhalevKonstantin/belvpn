@@ -114,6 +114,19 @@ class ConnectionStatusMessageFree extends StatelessWidget {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (icon)
+                Container(
+                  alignment: Alignment.center,
+                  width: 8,
+                  height: 8,
+                  decoration: new BoxDecoration(
+                    color: Color(0xff4ED12D),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              SizedBox(
+                width: 8,
+              ),
               Text(
                 message,
               ),
