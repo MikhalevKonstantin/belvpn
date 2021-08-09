@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/repository/servers_repository.dart';
 
@@ -78,7 +79,8 @@ class _ServerPickerState extends State<ServerPicker> {
                       child: SlideTransition(
                         position: inAnimation,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0,0.0,8.0,8.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                           child: child,
                         ),
                       ),
@@ -88,7 +90,8 @@ class _ServerPickerState extends State<ServerPicker> {
                       child: SlideTransition(
                         position: outAnimation,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0,0.0,8.0,8.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                           child: child,
                         ),
                       ),
@@ -103,14 +106,14 @@ class _ServerPickerState extends State<ServerPicker> {
                   children: [
                     SizedBox(height: 32),
                     CircleAvatar(
-                        radius: 32,
-                        backgroundImage: CachedNetworkImageProvider(
-                          widget.selected.flag,
-                        )
-
-                        // Image(widget.selected.flag, image: null, ).image
-
-                        ),
+                      radius: 32,
+                      backgroundColor: Colors.white54,
+                      backgroundImage: CachedNetworkImageProvider(
+                        widget.selected.flag,
+                        cacheManager: DefaultCacheManager(),
+                      ),
+                      // Image(widget.selected.flag, image: null, ).image
+                    ),
                     SizedBox(
                       height: 16,
                     ),

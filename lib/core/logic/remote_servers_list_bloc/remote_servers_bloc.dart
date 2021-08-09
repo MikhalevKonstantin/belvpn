@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:open_belvpn/core/repository/servers_repository.dart';
 
 class RemoteServersBloc extends Bloc<RemoteServersEvent, RemoteServersState> {
@@ -30,6 +31,14 @@ class RemoteServersBloc extends Bloc<RemoteServersEvent, RemoteServersState> {
           ...servers,
         ];
       }
+
+      // precache icons
+
+
+      servers.forEach((server) async {
+        await DefaultCacheManager().downloadFile(server.flag);
+      });
+
       yield RemoteServersLoaded(servers);
     }
   }
