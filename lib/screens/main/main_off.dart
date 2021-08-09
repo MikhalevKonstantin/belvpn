@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:open_belvpn/core/logic/eula/eula_cubit.dart';
 import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/remote_servers_list_bloc/remote_servers_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/connect/connect.dart';
+import 'package:open_belvpn/screens/eula/eula_screen.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
 import 'package:open_belvpn/screens/splash/splash.dart';
 
@@ -118,11 +120,46 @@ class SplashGate extends StatelessWidget {
       bloc: BlocProvider.of<VpnBloc>(context).proBloc,
       builder: (BuildContext context, ProState state) {
         if (state is Ready) {
-          return ServerListGate(child: child);
+          return EULAGate(child: child);
         } else {
           return Splash();
         }
       },
+    );
+  }
+}
+
+class EULAGate extends StatelessWidget {
+  const EULAGate({
+    Key key,
+    this.child,
+  }) : super(key: key);
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => EulaCubit(),
+      child: Builder(
+        builder: (ctx) => BlocConsumer(
+          bloc: ctx.watch<EulaCubit>(),
+          builder: (BuildContext context, EulaState state) {
+            if (state is EulaAccepted) {
+              // return EulaScreen(ctx.read<EulaCubit>().accept);
+              return ServerListGate(child: child);
+            } else if (state is EulaPending) {
+              return EulaScreen(ctx.read<EulaCubit>().accept);
+            } else {
+              // todo decline text notice
+              return Splash();
+            }
+          },
+          listener: (BuildContext context, EulaState state) {
+            print(state);
+            // exit(0);
+          },
+        ),
+      ),
     );
   }
 }
