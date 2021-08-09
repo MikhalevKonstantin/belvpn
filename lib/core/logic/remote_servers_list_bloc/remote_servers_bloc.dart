@@ -32,14 +32,32 @@ class RemoteServersBloc extends Bloc<RemoteServersEvent, RemoteServersState> {
         ];
       }
 
-      // precache icons
-
-
-      servers.forEach((server) async {
-        await DefaultCacheManager().downloadFile(server.flag);
-      });
+      await _precachingMethodParallel(servers);
 
       yield RemoteServersLoaded(servers);
+    }
+  }
+
+  precache(List<ServerInfo> servers) {
+    // precache icons
+    // await  DefaultCacheManager().emptyCache();
+    // final start = DateTime.now();
+    _precachingMethodParallel(servers);
+    // final end = DateTime.now();
+    // final delta = end.microsecondsSinceEpoch - start.microsecondsSinceEpoch;
+    // print(' preloading images took : $delta');
+  }
+
+  Future _precachingMethodParallel(List<ServerInfo> servers) => Future.wait(
+        [
+          ...servers
+              .map((server) => DefaultCacheManager().getSingleFile(server.flag))
+        ],
+      );
+
+  Future _precachingMethodSequential(List<ServerInfo> servers) async {
+    for (final ServerInfo server in servers) {
+      await DefaultCacheManager().getSingleFile(server.flag);
     }
   }
 
