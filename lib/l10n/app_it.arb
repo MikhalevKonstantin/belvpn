@@ -1,0 +1,51 @@
+{
+  "vital": "VPN Vital Security",
+  "start": "Inizia Il Tuo",
+  "subscription": "Abbonamento",
+  "fastest": "FI server VPN più veloci",
+  "more": "più posizioni virtuali,",
+  "moreTwo": " esperienza senza pubblicità",
+  "monthly": "Mensile",
+  "yearly": "Annuale",
+  "plan": "Il piano si rinnova automaticamente ogni settimana fino alla cancellazione.",
+  "getPremium": "Ottieni un Premio",
+  "policy": "Informativa sulla Privacy",
+  "restore": "Ripristinare",
+  "terms": "Termini di Utilizzo",
+  "upgrade": "Aggiorna",
+  "tapConnect": "TOCCA PER CONNETTERI",
+  "connecting": "Collegamento in corso",
+  "connected": "Collegato",
+  "tapChange": "Tocca per cambiare posizione",
+  "changeLocation": "Cambia posizione",
+  "currentIP": "IP Corrente",
+  "country": "Nazione",
+  "mB": " di ",
+  "mBTwo": " utilizzati",
+  "currentServer": "Server corrente",
+  "bestForGeneralBrowsing": "Gengo",
+  
+
+  
+  "canada": "Canada",
+  "india": "India",
+  "germany": "Germania",
+  "greatBritain": "Regno Unito",
+  "netherlands": "Olanda",
+  "singapore": "Singapore",
+  "unitedStates": "stati Uniti",
+  
+  
+  "auto": "Auto",
+  "serverLocation": "Posizione del server",
+  "settings": "Impostazioni",
+  "moreVirtual": "Altre posizioni virtuali",
+  "ultrafast": "Velocità di connessione ultraveloce",
+  "adFree": "Esperienza senza pubblicità",
+  "moreAboutPremium": "Maggiori informazioni su Premium",
+  "support": "Assistenza",
+  "aboutUs": "Chi Siamo",
+
+  "vpnSec" : "VPN Security",
+  "premium": "Premio"
+}

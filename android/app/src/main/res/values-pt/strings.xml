@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tap">TAP TO CONNECT</string>
+    <string name="cing">Connecting</string>
+    <string name="ced">Connected</string>
+</resources>

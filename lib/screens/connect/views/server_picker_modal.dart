@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/repository/servers_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServerPicker extends StatefulWidget {
   final List<ServerInfo> servers;
@@ -44,6 +45,7 @@ class _ServerPickerState extends State<ServerPicker> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return SafeArea(
       child: Material(
         child: Container(
@@ -117,7 +119,28 @@ class _ServerPickerState extends State<ServerPicker> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text(widget.selected.country,
+                    Text(
+                        widget.selected.country == 'Canada'
+                            ? t.canada
+                            : widget.selected.country == 'Germany'
+                                ? t.germany
+                                : widget.selected.country == 'Great Britain'
+                                    ? t.greatBritain
+                                    : widget.selected.country == 'India'
+                                        ? t.india
+                                        : widget.selected.country ==
+                                                'Netherlands'
+                                            ? t.netherlands
+                                            : widget.selected.country ==
+                                                    'Singapore'
+                                                ? t.singapore
+                                                : widget.selected.country ==
+                                                        'Canada (Auto)'
+                                                    ? t.canada +
+                                                        ' (' +
+                                                        t.auto +
+                                                        ')'
+                                                    : t.unitedStates,
                         key: ValueKey(widget.selected.country),
                         style: GoogleFonts.lato(
                             color: Colors.black,
@@ -127,7 +150,7 @@ class _ServerPickerState extends State<ServerPicker> {
                 ),
               ),
               // SizedBox(height: 4),
-              Text('Current location',
+              Text(t.currentServer,
                   style: GoogleFonts.lato(
                       color: Color(0x80101010).withOpacity(0.1),
                       fontSize: 14,
@@ -167,7 +190,7 @@ class _ServerPickerState extends State<ServerPicker> {
                             // print(value);
                           },
                           subtitle: i == 0
-                              ? Text('Best for general browsing',
+                              ? Text(t.bestForGeneralBrowsing,
                                   style: GoogleFonts.lato(
                                       color: Color(0x33000000),
                                       fontSize: 11,
@@ -182,7 +205,29 @@ class _ServerPickerState extends State<ServerPicker> {
                           ),
                           groupValue: widget.selected.country,
                           title: Text(
-                            widget.servers[i].country,
+                            widget.servers[i].country == 'Canada'
+                                ? t.canada
+                                : widget.servers[i].country == 'Germany'
+                                    ? t.germany
+                                    : widget.servers[i].country ==
+                                            'Great Britain'
+                                        ? t.greatBritain
+                                        : widget.servers[i].country == 'India'
+                                            ? t.india
+                                            : widget.servers[i].country ==
+                                                    'Netherlands'
+                                                ? t.netherlands
+                                                : widget.servers[i].country ==
+                                                        'Singapore'
+                                                    ? t.singapore
+                                                    : widget.servers[i]
+                                                                .country ==
+                                                            'Canada (Auto)'
+                                                        ? t.canada +
+                                                            ' (' +
+                                                            t.auto +
+                                                            ')'
+                                                        : t.unitedStates,
                             style: GoogleFonts.lato(
                                 color: Color(0xff101010),
                                 fontSize: 15,
@@ -194,7 +239,7 @@ class _ServerPickerState extends State<ServerPicker> {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                                'Locations (${widget.servers.length - 1})',
+                                '${t.serverLocation} (${widget.servers.length - 1})',
                                 style: GoogleFonts.lato(
                                     color: Color(0x80101010),
                                     fontSize: 13,

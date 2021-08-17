@@ -1,0 +1,52 @@
+{
+  "vital": "VPN Vital Security",
+
+  "start": "Start Your",
+  "subscription":"Subscription",
+  "fastest": "Fastest VPN Servers",
+  "more": "more virtual locations,",
+  "moreTwo": "ad-free experience",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "plan": "Plan automatically renews weekly untill cancelled.",
+  "getPremium": "Get Premium",
+  "policy": "Privacy Policy",
+  "restore": "Restore",
+  "terms": "Terms of Us",
+
+  "upgrade": "Upgrade",
+  "tapConnect": "TAP TO CONNECT",
+  "connecting": "Connecting",
+  "connected": "Connected",
+  "tapChange": "Tap to change location",
+  "changeLocation": "Change location",
+  "currentIP": "Current IP",
+  "country": "Country",
+  "mB": " of ",
+  "mBTwo": " used",
+
+  "currentServer": "Current server ",
+  "bestForGeneralBrowsing": "Best for general browsing",
+  
+  "canada": "Canada",
+  "india": "India",
+  "germany": "Germany",
+  "greatBritain": "Great Britain",
+  "netherlands": "Netherlands",
+  "singapore": "Singapore",
+  "unitedStates": "United States",
+  
+
+  "auto": "Auto",
+  "serverLocation": "locations",
+  "settings": "Settings",
+  "moreVirtual": "More virtual locations",
+  "ultrafast": "Ultra-fast connection speed",
+  "adFree": "Ad-free experience",
+  "moreAboutPremium": "More about Premium",
+  "support": "Support",
+  "aboutUs": "About Us",
+
+  "vpnSec" : "VPN Security",
+  "premium": "Premium"
+}

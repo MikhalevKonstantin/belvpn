@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/logic/vpn_connection_bloc/connection_bloc.dart';
 import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectionStatusMessage extends StatelessWidget {
   const ConnectionStatusMessage({Key key}) : super(key: key);
@@ -42,6 +43,7 @@ class ConnectionStatusMessagePro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     final ConnectionBloc bloc =
         BlocProvider.of<VpnBloc>(context).connectionBloc;
 
@@ -50,15 +52,15 @@ class ConnectionStatusMessagePro extends StatelessWidget {
         builder: (context, ConnectionState state) {
           var message, icon = false;
           if (state is Disconnected) {
-            message = 'TAP TO CONNECT';
+            message = t.tapConnect;
           }
 
           if (state is Connecting || state is Reconnecting) {
-            message = 'CONNECTING';
+            message = t.connecting;
           }
 
           if (state is Connected) {
-            message = 'CONNECTED';
+            message = t.connected;
             icon = true;
           }
           return Row(
@@ -91,6 +93,7 @@ class ConnectionStatusMessageFree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     final ConnectionBloc bloc =
         BlocProvider.of<VpnBloc>(context).connectionBloc;
 
@@ -100,15 +103,15 @@ class ConnectionStatusMessageFree extends StatelessWidget {
           var message = '', icon = false;
 
           if (state is Disconnected) {
-            message = 'TAP TO CONNECT';
+            message = t.tapConnect;
           }
 
           if (state is Connecting || state is Reconnecting) {
-            message = 'CONNECTING';
+            message = t.connecting;
           }
 
           if (state is Connected) {
-            message = 'CONNECTED';
+            message = t.connected;
             icon = true;
           }
           return Row(

@@ -13,6 +13,7 @@ import 'package:open_belvpn/screens/connect/views/server_picker_modal.dart';
 import 'package:open_belvpn/screens/connect/views/title.dart';
 import 'package:open_belvpn/screens/subscription/subscription.dart';
 // import 'package:loading_gifs/loading_gifs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const String vpnConnected = NizVpn.vpnConnected;
 const String vpnDisconnected = NizVpn.vpnDisconnected;

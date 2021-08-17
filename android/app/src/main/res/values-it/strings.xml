@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tap">TOCCA PER CONNETTERI</string>
+    <string name="cing">Collegamento in corso</string>
+    <string name="ced">Collegato</string>
+</resources>

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/subscription/bloc/subscription_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'components/subscription_buttons.dart';
 
@@ -31,6 +32,7 @@ class _SubscriptionState extends State<Subscription> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: Color(0xffF2F2F7),
       body: SafeArea(
@@ -64,12 +66,12 @@ class _SubscriptionState extends State<Subscription> {
 
                     Column(
                       children: [
-                        Text("Start Your",
+                        Text(t.start,
                             style: GoogleFonts.lato(
                                 fontSize: 31,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF101010))),
-                        Text('Subscription',
+                        Text(t.subscription,
                             style: GoogleFonts.lato(
                                 fontSize: 31,
                                 fontWeight: FontWeight.bold,
@@ -79,10 +81,10 @@ class _SubscriptionState extends State<Subscription> {
                     SizedBox(height: 8),
                     Column(
                       children: [
-                        Text('Faster VPN servers, more virtual locations, ',
+                        Text('${t.fastest}, ${t.more} ',
                             style: GoogleFonts.lato(
                                 fontSize: 13, color: Color(0xFF101010))),
-                        Text("ad-free experience",
+                        Text(t.moreTwo,
                             style: GoogleFonts.lato(
                                 fontSize: 13, color: Color(0xFF101010))),
                       ],
@@ -107,8 +109,7 @@ class _SubscriptionState extends State<Subscription> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              "Plan automatically renews weekly untill cancelled.",
+                          child: Text(t.plan,
                               style: GoogleFonts.lato(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
@@ -140,7 +141,7 @@ class _SubscriptionState extends State<Subscription> {
                               "assets/svg_icons/crown.svg",
                             ),
                           ),
-                          Text('Get Premium',
+                          Text(t.getPremium,
                               style: GoogleFonts.lato(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600,
@@ -160,7 +161,7 @@ class _SubscriptionState extends State<Subscription> {
                             onTap: () {},
                             // style:  ButtonStyle(padding: EdgeInsets.vertical),
                             child: Text(
-                              'Privacy Policy',
+                              t.policy,
                               style: bottomButtonTextStyle,
                             ),
                           ),
@@ -168,7 +169,7 @@ class _SubscriptionState extends State<Subscription> {
                           InkWell(
                             onTap: () {},
                             child: Text(
-                              'Restore',
+                              t.restore,
                               style: bottomButtonTextStyle,
                             ),
                           ),
@@ -176,7 +177,7 @@ class _SubscriptionState extends State<Subscription> {
                           InkWell(
                             onTap: () {},
                             child: Text(
-                              'Terms of Use',
+                              t.terms,
                               style: bottomButtonTextStyle,
                             ),
                           ),

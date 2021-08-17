@@ -6,7 +6,7 @@ import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/core/models/geo_ip.dart';
 import 'package:open_belvpn/core/repository/servers_repository.dart';
 
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IpAddressView extends StatelessWidget {
   const IpAddressView({Key key}) : super(key: key);
@@ -28,6 +28,7 @@ class IpAddressViewLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).selectedServerBloc,
       builder: (context, ServerInfo geo) {
@@ -43,7 +44,7 @@ class IpAddressViewLocal extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Current IP: ",
+                      t.currentIP + ": ",
                       style: textStyle.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
@@ -74,7 +75,6 @@ class IpAddressViewLocal extends StatelessWidget {
   }
 }
 
-
 class IpAddressViewRemote extends StatelessWidget {
   const IpAddressViewRemote({Key key}) : super(key: key);
 
@@ -86,6 +86,8 @@ class IpAddressViewRemote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
+
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).ipAddressBloc,
       builder: (context, GeoIP server) {
@@ -101,7 +103,7 @@ class IpAddressViewRemote extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Current IP: ",
+                      t.currentIP + ": ",
                       style: textStyle.copyWith(
                         fontWeight: FontWeight.w500,
                       ),

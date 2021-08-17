@@ -12,6 +12,7 @@ import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
 import 'package:open_belvpn/screens/subscription/subscription.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({
@@ -109,6 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -128,8 +130,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildPremiumPlate() {
+    var t = AppLocalizations.of(context);
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.only(left: 0),
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -153,12 +156,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('VPN Vital Security',
+                            Text(t.vital,
                                 style: GoogleFonts.lato(
                                     color: Color(0xFF101010),
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold)),
-                            Text(' Premium',
+                            Text(' ${t.premium}',
                                 style: GoogleFonts.lato(
                                     color: Color(0xFF007aff),
                                     fontSize: 17,
@@ -179,12 +182,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Icons.check_circle,
                                     color: Color(0xFF007aff),
                                   ),
-                                  Text('   More vitrual locations',
-                                      style: GoogleFonts.lato(
-                                          color: Color(0xFF000000),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: -0.55)),
+                                  Flexible(
+                                    child: Text('   ${t.moreVirtual}',
+                                        style: GoogleFonts.lato(
+                                            color: Color(0xFF000000),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: -0.55)),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -193,12 +198,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Icons.check_circle,
                                     color: Color(0xFF007aff),
                                   ),
-                                  Text('   Ultra-fast connection speed',
-                                      style: GoogleFonts.lato(
-                                          color: Color(0xFF000000),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: -0.55)),
+                                  Flexible(
+                                    child: Text('   ${t.ultrafast}',
+                                        style: GoogleFonts.lato(
+                                            color: Color(0xFF000000),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: -0.55)),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -207,12 +214,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Icons.check_circle,
                                     color: Color(0xFF007aff),
                                   ),
-                                  Text('   Ad-free experience',
-                                      style: GoogleFonts.lato(
-                                          color: Color(0xFF000000),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: -0.55)),
+                                  Flexible(
+                                    child: Text('   ${t.adFree}',
+                                        style: GoogleFonts.lato(
+                                            color: Color(0xFF000000),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            letterSpacing: -0.55)),
+                                  ),
                                 ],
                               ),
                             ],
@@ -235,13 +244,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             height: 24,
                             color: Color(0xff007aff),
                           ),
-                          label: Text(
-                            'More about Premium',
-                            style: GoogleFonts.lato(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.55,
-                              color: Color(0xff007aff),
+                          label: Flexible(
+                            child: Text(
+                              t.moreAboutPremium,
+                              style: GoogleFonts.lato(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.55,
+                                color: Color(0xff007aff),
+                              ),
                             ),
                           ),
                         )
@@ -255,9 +266,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   buildTitle() {
+    var t = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
-      child: Text('Settings',
+      child: Text(t.settings,
           style: GoogleFonts.lato(
               color: Colors.black, fontSize: 19, fontWeight: FontWeight.bold)),
     );
@@ -265,6 +277,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   buildSettingsButton({VoidCallback onTap, String title}) {
     return ListTile(
+      horizontalTitleGap: 0,
       onTap: onTap,
       title: Text(title,
           style: GoogleFonts.lato(
@@ -282,30 +295,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   buildSettingsButtons() {
+    var t = AppLocalizations.of(context);
     return Container(
       child: ListView(
         shrinkWrap: true,
         children: [
           buildSettingsButton(
-            title: "Support",
+            title: t.support,
             onTap: () {
               _launched = _launchInBrowser(_mail + _deviceData.toString());
             },
           ),
           buildSettingsButton(
-            title: "Privacy Policy",
+            title: t.policy,
             onTap: () {
               _launched = _launchInBrowser(_urlPrivacy);
             },
           ),
           buildSettingsButton(
-            title: "Terms of use",
+            title: t.terms,
             onTap: () {
               _launched = _launchInBrowser(_urlTerms);
             },
           ),
           buildSettingsButton(
-            title: "About Us",
+            title: t.aboutUs,
             onTap: () {
               _launched = _launchInBrowser(_urlAbout);
             },
@@ -316,6 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   buildPremiumButton() {
+    var t = AppLocalizations.of(context);
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).proBloc,
       builder: (context, state) {
@@ -343,7 +358,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: Colors.white,
             ),
             label: Text(
-              'Get Premium',
+              t.getPremium,
               style: GoogleFonts.lato(
                   color: Color(0xffffffff),
                   fontSize: 17,

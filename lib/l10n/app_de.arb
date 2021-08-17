@@ -1,0 +1,51 @@
+{
+  "vital": "VPN Vital Security",
+
+  "start": "Starten Sie Ihr",
+  "subscription": "Abonnement",
+  "fastest": "Die schnellsten VPN-Server",
+  "more": "weitere virtuelle Standorte,",
+  "moreTwo": " werbefreie Erfahrung",
+  "monthly": "Monatlich",
+  "yearly": "Jährlich",
+  "plan": "Der Plan erneuert sich automatisch wöchentlich bis zur Kündigung.",
+  "getPremium": "Premium bekommen",
+  "policy": "Datenschutzerklärung",
+  "restore": "Wiederherstellen",
+  "terms": "Nutzungsbedingungen",
+
+  "upgrade": "Aktualisierung",
+  "tapConnect": "TIPPEN SIE ZUM VERBINDEN",
+  "connecting": " Verbinde",
+  "connected": "Verbunden",
+  "tapChange": "Tippen Sie, um den Standort zu ändern",
+  "changeLocation": "Standort ändern",
+  "currentIP": "Aktueller IP",
+  "country": "Land",
+  "mB": "  von ",
+  "mBTwo": " belegt",
+
+  "currentServer": "Current server ",
+  "bestForGeneralBrowsing": "Best for general browsing",
+  
+  "canada": "Kanada",
+  "india": "Indien ",
+  "germany": "Deutschland",
+  "greatBritain": "Vereinigtes Königreich",
+  "netherlands": "Niederlande",
+  "singapore": "Singapur",
+  "unitedStates": "United States",
+
+  "auto": "Auto",
+  "serverLocation": "Server-Standort",
+  "settings": "Einstellungen",
+  "moreVirtual": "Mehr virtuelle Standorte",
+  "ultrafast": "Ultra-schnelle Verbindungsgeschwindigkeit",
+  "adFree": "Werbefreies Erlebnis",
+  "moreAboutPremium": "Mehr über Premium",
+  "support": "Support",
+  "aboutUs": "Über Uns",
+
+  "vpnSec" : "VPN Security",
+  "premium": "Premium"
+}

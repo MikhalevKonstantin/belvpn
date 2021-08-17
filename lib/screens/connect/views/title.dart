@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_belvpn/core/logic/purchases/pro_bloc.dart';
 import 'package:open_belvpn/core/logic/vpn_bloc/vpn_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectScreenTitle extends StatelessWidget {
   static final titleStyle = GoogleFonts.lato(
@@ -13,12 +14,13 @@ class ConnectScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     final bloc = BlocProvider.of<VpnBloc>(context).proBloc;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'VPN Vital Security',
+          t.vital,
           style: titleStyle,
         ),
         BlocBuilder(
@@ -26,7 +28,7 @@ class ConnectScreenTitle extends StatelessWidget {
             builder: (_, proState) {
               var text = '';
               if (proState is Ready && proState.isPro) {
-                text = ' Premium';
+                text = ' ${t.premium}';
               }
               return Text(text,
                   style: titleStyle.copyWith(

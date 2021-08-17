@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -20,7 +23,7 @@ class Splash extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 8),
-                    child: Text(' \VPN Vital Security',
+                    child: Text(t.vital,
                         style: GoogleFonts.lato(
                             fontSize: 19, fontWeight: FontWeight.bold)),
                   ),

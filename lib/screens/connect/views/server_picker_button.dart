@@ -9,6 +9,8 @@ import 'package:open_belvpn/core/repository/servers_repository.dart';
 import 'package:open_belvpn/screens/connect/widgets/animated_slide_switcher.dart';
 import 'package:open_belvpn/screens/connect/widgets/rounded_box.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ServerPickerButton extends StatelessWidget {
   const ServerPickerButton({
     Key key,
@@ -20,6 +22,8 @@ class ServerPickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<VpnBloc>(context).selectedServerBloc;
+
+    var t = AppLocalizations.of(context);
 
     return RoundedBox(
       child: BlocBuilder(
@@ -46,7 +50,21 @@ class ServerPickerButton extends StatelessWidget {
             title: AnimatedSlideSwitcher(
               reverse: false,
               child: Text(
-                server.country,
+                server.country == 'Canada'
+                    ? t.canada
+                    : server.country == 'Germany'
+                        ? t.germany
+                        : server.country == 'Great Britain'
+                            ? t.greatBritain
+                            : server.country == 'India'
+                                ? t.india
+                                : server.country == 'Netherlands'
+                                    ? t.netherlands
+                                    : server.country == 'Singapore'
+                                        ? t.singapore
+                                        : server.country == 'Canada (Auto)'
+                                            ? t.canada + ' (' + t.auto + ')'
+                                            : t.unitedStates,
                 textAlign: TextAlign.start,
                 key: ValueKey(server.country),
                 style: GoogleFonts.lato(

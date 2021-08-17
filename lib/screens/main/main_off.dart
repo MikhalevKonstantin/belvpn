@@ -9,6 +9,8 @@ import 'package:open_belvpn/screens/connect/connect.dart';
 import 'package:open_belvpn/screens/eula/eula_screen.dart';
 import 'package:open_belvpn/screens/settings/settings.dart';
 import 'package:open_belvpn/screens/splash/splash.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainOff extends StatefulWidget {
   // const MainScreen({Key? key}) : super(key: key);
@@ -23,6 +25,16 @@ class _MainScreenState extends State<MainOff> {
     return BlocProvider<VpnBloc>(
       create: (_) => VpnBloc(),
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: [
+          Locale('en', ''), // English, no country code
+          Locale('de', ''), // English, no country code
+          Locale('it', ''), // English, no country code
+          Locale('fr', ''), // English, no country code
+          Locale('pt', ''), // English, no country code
+          Locale('ja', ''), // English, no country code
+          Locale('es', ''), // Spanish, no country code
+        ],
         debugShowCheckedModeBanner: false,
         home: BottomNavigationApp(),
       ),

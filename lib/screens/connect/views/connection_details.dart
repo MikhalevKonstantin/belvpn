@@ -15,6 +15,7 @@ import 'package:open_belvpn/screens/connect/widgets/text_button_filled.dart';
 import 'package:open_belvpn/screens/connect/widgets/text_button_outlined.dart';
 import 'package:open_belvpn/screens/subscription/subscription.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectionDetails extends StatelessWidget {
   const ConnectionDetails({Key key}) : super(key: key);
@@ -52,6 +53,7 @@ class ConnectionDetailsPro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     // 3 states:
     // [disconnected]:
     // -> ip address + country + outline button tap_to_change
@@ -86,13 +88,12 @@ class ConnectionDetailsPro extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                mainAxisAlignment:
-                (connectionState is Disconnected)
+                mainAxisAlignment: (connectionState is Disconnected)
                     ? MainAxisAlignment.spaceBetween
                     : MainAxisAlignment.center,
                 children: [
                   IpAddressView(),
-                  if(connectionState is Disconnected ) CountryCode(),
+                  if (connectionState is Disconnected) CountryCode(),
                 ],
               ),
               SizedBox(
@@ -100,13 +101,13 @@ class ConnectionDetailsPro extends StatelessWidget {
               ),
               (connectionState is Disconnected)
                   ? OutlineTextButton(
-                      text: 'Tap to change location',
+                      text: t.tapConnect,
                       onPressed:
                           BlocProvider.of<VpnBloc>(context, listen: false)
                               .connect,
                     )
                   : FilledTextButton(
-                      text: 'Change location',
+                      text: t.changeLocation,
                       onPressed: handleTap,
                     ),
             ],
@@ -128,6 +129,7 @@ class ConnectionDetailsFree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return BlocBuilder(
       bloc: BlocProvider.of<VpnBloc>(context).trafficCounterBloc,
       builder: (context, int total) {
@@ -148,19 +150,20 @@ class ConnectionDetailsFree extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('$totalMB  of $limitMB used', style: textStyle),
+              Text('$totalMB  ${t.mB} $limitMB ${t.mBTwo}', style: textStyle),
               SizedBox(height: 16),
               LinearPercentIndicator(
                 width: MediaQuery.of(context).size.width - 64,
                 lineHeight: 14.0,
-                percent: percent.clamp(0.0,1.0),
-                progressColor: percent!=null &&  percent>1.0? Colors.red:Colors.blue,
+                percent: percent.clamp(0.0, 1.0),
+                progressColor:
+                    percent != null && percent > 1.0 ? Colors.red : Colors.blue,
               ),
               SizedBox(
                 height: 8,
               ),
               OutlineTextButton(
-                text: "Upgrade",
+                text: t.upgrade,
                 icon: SvgPicture.asset(
                   'assets/svg_icons/crown.svg',
                   color: Color(0xff007AFF),
